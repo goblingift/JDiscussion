@@ -4,9 +4,11 @@
  */
 package gift.goblin.jdiscussion.controller;
 
+import gift.goblin.jdiscussion.ApplicationInitializer;
 import gift.goblin.jdiscussion.WebSecurityConfig;
-import static gift.goblin.jdiscussion.WebSecurityConfig.SESSION_FIELD_GAMEPROGRESS;
+import gift.goblin.jdiscussion.bean.SessionManager;
 import gift.goblin.jdiscussion.dto.UserCredentials;
+import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -42,12 +45,55 @@ public class RegistrationController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping
-    public String renderRegistrationForm(Model model) {
+    public String renderRegistrationForm(HttpSession session, Model model, @RequestParam(name = "grp") Optional<String> groupId) {
+        
+        boolean loggedInAsUser = false;
+        if (groupId.isPresent()) {
+            logger.info("Found grp-id in request: {}", groupId);
+            loggedInAsUser = tryToLoginAsGroupMember(session, groupId.get());
+        }
         
         model.addAttribute("userForm", new UserCredentials());
         model.addAttribute("build_artifact", buildProperties.getArtifact());
         model.addAttribute("build_version", buildProperties.getVersion());
-        return "registration";
+        
+        if (loggedInAsUser) {
+            return "redirect:/home";
+        } else {
+            return "registration";
+        }
+    }
+    
+    private boolean tryToLoginAsGroupMember(HttpSession session, String groupId) {
+        boolean success = false;
+        
+        if (groupId != null && !groupId.isEmpty()) {
+            try {
+                Long parseLong = Long.parseLong(groupId);
+                if (SessionManager.GROUP_IDS.contains(parseLong)) {
+                    if (SessionManager.GROUP_ID_1 == parseLong) {
+                        session.setAttribute(WebSecurityConfig.SESSION_FIELD_GROUPNUMBER, 1);
+                    } else if (SessionManager.GROUP_ID_2 == parseLong) {
+                        session.setAttribute(WebSecurityConfig.SESSION_FIELD_GROUPNUMBER, 2);
+                    } else if (SessionManager.GROUP_ID_3 == parseLong) {
+                        session.setAttribute(WebSecurityConfig.SESSION_FIELD_GROUPNUMBER, 3);
+                    } else if (SessionManager.GROUP_ID_4 == parseLong) {
+                        session.setAttribute(WebSecurityConfig.SESSION_FIELD_GROUPNUMBER, 4);
+                    }
+                    UserDetails userDetails = userDetailsManager.loadUserByUsername("user");
+                    Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                    success = true;
+                } else {
+                    logger.warn("The parameter grp ({}) is not included in the defined list of allowed ids: {}", groupId, SessionManager.GROUP_IDS);
+                }
+                
+            } catch (NumberFormatException e) {
+                logger.warn("The parameter grp doesnt contain a Long-value: {}", groupId);
+            }
+        }
+        
+        return success;
     }
 
     @PostMapping(path = "/submit")

@@ -55,6 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String ADMIN_USERNAME = "superadmin_master";
     public static final String SESSION_FIELD_GAMEPROGRESS = "gameprogress";
     public static final String SESSION_FIELD_USERNAME = "username";
+    public static final String SESSION_FIELD_GROUPNUMBER = "groupNumber";
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {

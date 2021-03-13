@@ -36,6 +36,11 @@ public class Argument {
     private Byte category;
     
     private String argument;
+    
+    /**
+     * Relationship, to which group this argument should be included.
+     */
+    private Long groupId;
 
     public String getId() {
         return id;
@@ -77,7 +82,13 @@ public class Argument {
         this.argument = argument;
     }
 
-    
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
 
     @Override
     public String toString() {

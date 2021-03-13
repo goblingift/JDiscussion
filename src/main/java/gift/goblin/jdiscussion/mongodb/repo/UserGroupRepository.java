@@ -5,15 +5,13 @@
 package gift.goblin.jdiscussion.mongodb.repo;
 
 import gift.goblin.jdiscussion.mongodb.model.Argument;
-import java.util.List;
+import gift.goblin.jdiscussion.mongodb.model.UserGroup;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  *
  * @author andre
  */
-public interface ArgumentRepository extends MongoRepository<Argument, String>{
-    
-    List<Argument> findByGroupId(Long groupId);
+public interface UserGroupRepository extends MongoRepository<UserGroup, Long> {
     
 }
