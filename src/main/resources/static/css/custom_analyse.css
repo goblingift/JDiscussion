@@ -1,0 +1,91 @@
+/*
+Copyright (C) 2020 Andre Kessler (https://github.com/goblingift)
+All rights reserved
+*/
+/* 
+    Created on : 13.03.2021, 17:39:28
+    Author     : andre
+*/
+
+#scale-top {
+  height: 20px;
+  width: 1400px;
+  background: black;
+  position: absolute;
+  left: 135px;
+  bottom: 187px;
+  transform: rotate(0deg);
+  z-index: 1;
+  animation: scale-top 5s infinite alternate-reverse;
+}
+
+body {
+  overflow: hidden;
+}
+
+#triangle {
+  position: absolute;
+  bottom: -280px;
+  left: 430px;
+  height: 0;
+  width: 0;
+  border-top: 0px;
+  border-left: 300px solid transparent;
+  border-bottom: 300px solid transparent;
+  border-right: 300px solid red;
+  transform: rotate(-45deg);
+  z-index: 0;
+}
+
+.box {
+  background: green;
+  position: absolute;
+  bottom: 20px;
+  height: 40px;
+  width:  200px;
+}
+
+/*
+#right-box {
+  height: 40px;
+  width: 40px;
+  left: 440px;
+}
+
+#left-box {
+  height: 40px;
+  width: 40px;
+  left: 20px;
+} */
+
+#left-side-main {
+	float: left;
+}
+
+.side {
+ 		 float: left;
+     width: 32%;
+     margin-right: 2%;
+     padding: 20px;
+}
+
+
+#left-side-1 > .box{
+  left: 0px;
+}
+#left-side-2 > .box{
+  left: 230px;
+}
+#left-side-3 > .box{
+  left: 460px;
+}
+
+#right-side-1 > .box{
+  left: 740px;
+}
+#right-side-2 > .box{
+  left: 970px;
+}
+#right-side-3 > .box{
+  left: 1200px;
+}

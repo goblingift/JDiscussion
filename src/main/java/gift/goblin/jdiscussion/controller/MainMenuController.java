@@ -31,7 +31,7 @@ public class MainMenuController {
 
     @Autowired
     private GameStatus gameStatus;
-    
+
     @Autowired
     private SessionManager sessionManager;
 
@@ -52,13 +52,14 @@ public class MainMenuController {
             model.addAttribute("groupNumber", optGroupNumber.get());
             model.addAttribute("groupName", sessionManager.getGroupName(optGroupNumber.get()));
         }
-        
+
         model.addAttribute("createArguments", gameStatus.isCreateArguments());
+        model.addAttribute("analysePhase", gameStatus.isAnalyseArguments());
         model.addAttribute("build_artifact", buildProperties.getArtifact());
         model.addAttribute("build_version", buildProperties.getVersion());
         return "main_menu";
     }
-    
+
     @GetMapping(value = "/start-game")
     public String startGame(Model model, Authentication authentication) {
 
@@ -80,6 +81,32 @@ public class MainMenuController {
             gameStatus.setCreateArguments(false);
         } else {
             logger.warn("User is no admin- wont stop game now.");
+        }
+
+        return "redirect:/home";
+    }
+
+    @GetMapping(value = "/start-analyse")
+    public String startAnalysePhase(Model model, Authentication authentication) {
+
+        if (sessionManager.isUserAdmin(authentication)) {
+            logger.info("Analyse phase enabled!");
+            gameStatus.setAnalyseArguments(true);
+        } else {
+            logger.warn("User is no admin- wont start analysis phase now.");
+        }
+
+        return "redirect:/home";
+    }
+
+    @GetMapping(value = "/stop-analyse")
+    public String stopAnalysePhase(Model model, Authentication authentication) {
+
+        if (sessionManager.isUserAdmin(authentication)) {
+            logger.info("Analyse phase disabled!");
+            gameStatus.setAnalyseArguments(false);
+        } else {
+            logger.warn("User is no admin- wont stop analysis phase now.");
         }
 
         return "redirect:/home";

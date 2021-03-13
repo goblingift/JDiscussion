@@ -1,0 +1,237 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="library_includes :: frontend_libraries_analyse" />
+    <body>
+
+
+
+
+
+
+        <input id="number" readonly type="number" value="42">
+
+
+
+            <button onclick="addBox(1)"
+                    id="button1"
+                    type="button">Add LEFT</button>
+
+            <button onclick="addBox(2)"
+                    id="button2"
+                    type="button">Add RIGHT</button>
+
+
+            <button onclick="moveScale(1)"
+                    id="button1"
+                    type="button">ROTATE CLOCKWISE</button>
+            <button onclick="moveScale(2)"
+                    id="button2"
+                    type="button">ROTATE ANTICLOCKW</button>
+
+            <button onclick="calculateAngle()"
+                    id="button_angle"
+                    type="button">Calculate angle</button>
+
+
+
+            <div id=scale-top>
+                <div id="left-side-main"
+                     class="row">
+
+                    <div id="left-side-1"
+                         class="col-sm">
+                        <div id=left-box
+                             data-weight=1
+                             class=box>Car</div>
+
+                    </div>
+
+                    <div id="left-side-2"
+                         class="col-sm">
+                        <div id=left-box
+                             data-weight=2
+                             class=box>Money</div>
+                    </div>
+
+                    <div id="left-side-3"
+                         class="col-sm">
+                        <div id=left-box
+                             data-weight=2
+                             class=box>MouseVeryLongM...</div>
+                    </div>
+
+
+                </div>
+
+                <div id="right-side-main">
+                    <div id="right-side-1">
+                        <div data-weight=2
+                             class=box>MouseVeryLongM...</div>
+                    </div>
+                    <div id="right-side-2">
+                        <div data-weight=2
+                             class=box>MouseVeryLongM...</div>
+                    </div>
+                    <div id="right-side-3">
+                        <div data-weight=2
+                             class=box>MouseVeryLongM...</div>
+                    </div>
+                </div>
+
+                <!--div id=left-box class=box >Auto</div>
+              <div id=left-box2 style="bottom:70px" class=box >Sofa</div>
+              <div id=left-box3 style="bottom:140px" class=box >Sofa2</div>
+              <div id=left-box4 style="bottom:220px" class=box >Sofa3</div-->
+
+                <!--div id=right-box class=box >
+                <button type="submit" onclick="moveBox('right-box')"><</button>
+                <button type="submit">></button>
+              </div-->
+            </div>
+            <div id=triangle>
+
+            </div>
+
+
+            <script th:inline="javascript">
+                let r = 0;
+                let size = 40;
+                let size2 = 40;
+
+                function moveBox(element) {
+                    $('#' + element).style.left = "70px";
+                }
+
+                function moveScale(element) {
+                    if (element == 1) {
+                        r = r - 2;
+                        size = size + 2;
+                        document.getElementById("scale-top").style.transform = "rotate(" + r + "deg)";
+                        document.getElementById("left-box").style.height = size + "px";
+                        // document.getElementById("left-box").style.width =  size+"px"; 
+
+                    }
+                    if (element == 2) {
+                        r = r + 2;
+                        size2 = size2 + 2;
+                        document.getElementById("scale-top").style.transform = "rotate(" + r + "deg)";
+                        document.getElementById("right-box").style.height = size2 + "px";
+                        // document.getElementById("right-box").style.width =  size2+"px";
+                    }
+                    console.log("r:" + r + " sizes:" + size + " " + size2)
+                }
+
+
+                function calculateAngle() {
+
+                    // maximum angle is: 22
+
+                    // get all left-side boxes
+                    var leftSide1Divs = document.getElementById("left-side-1").children.length;
+                    var leftSide2Divs = document.getElementById("left-side-2").children.length;
+                    var leftSide3Divs = document.getElementById("left-side-3").children.length;
+                    var weightLeftSide = (leftSide1Divs * 1) + (leftSide2Divs * 2) + (leftSide3Divs * 3);
+
+                    // get all right-side boxes
+                    var rightSide1Divs = document.getElementById("right-side-1").children.length;
+                    var rightSide2Divs = document.getElementById("right-side-2").children.length;
+                    var rightSide3Divs = document.getElementById("right-side-3").children.length;
+                    var weightRightSide = (rightSide1Divs * 1) + (rightSide2Divs * 2) + (rightSide3Divs * 3);
+
+                    var rightSideBigger;
+                    var sameWeights = false;
+                    if (weightRightSide > weightLeftSide) {
+                        rightSideBigger = true;
+                    } else if (weightRightSide < weightLeftSide) {
+                        rightSideBigger = false;
+                    } else {
+                        sameWeights = true;
+                    }
+
+
+                    if (sameWeights) {
+                        setAngle(0);
+                    } else if (rightSideBigger) {
+                        var percentage = weightRightSide / weightLeftSide;
+                        var newAngle = (percentage * 100) - 100;
+
+                        console.log(newAngle);
+                        var truncated = newAngle - newAngle % 1;
+                        var newAngleFinal = 15 * (truncated / 100);
+
+                        if (newAngleFinal > 15) {
+                            setAngle(15);
+                        } else {
+                            setAngle(newAngleFinal);
+                        }
+
+                        console.log(newAngleFinal);
+                    } else if (!rightSideBigger) {
+                        var percentage = weightLeftSide / weightRightSide;
+                        var newAngle = (percentage * 100) - 100;
+
+                        console.log(newAngle);
+                        var truncated = newAngle - newAngle % 1;
+                        var newAngleFinal = 15 * (truncated / 100);
+
+                        if (newAngleFinal > 15) {
+                            setAngle(-15);
+                        } else {
+                            setAngle("-" + newAngleFinal)
+                        }
+
+                        console.log(newAngleFinal);
+                    }
+
+
+                }
+
+                function setAngle(r) {
+                    document.getElementById("scale-top").style.transform = "rotate(" + r + "deg)";
+                }
+
+
+                function repaint() {
+
+                    // get all left-side boxes
+                    var leftSide1Divs = document.getElementById("left-side-1").children;
+                    var leftSide2Divs = document.getElementById("left-side-2").children;
+                    var leftSide3Divs = document.getElementById("left-side-3").children;
+
+
+
+                }
+
+
+// leftOrRight: left = 1, right = 2
+                function addBox(leftOrRight) {
+
+
+                    var leftSideDiv;
+                    if (leftOrRight == 1) {
+                        leftSideDiv = document.getElementById("left-side-2");
+                    } else if (leftOrRight == 2) {
+                        leftSideDiv = document.getElementById("right-side-2");
+                    }
+
+                    var numberOfElements = leftSideDiv.children.length;
+                    var newHeight = numberOfElements * 65;
+
+                    var newDiv = document.createElement("div");
+                    var newContent = document.createTextNode("NEW");
+
+
+                    newDiv.className = "box";
+                    newDiv.style.bottom = newHeight + "px";
+                    newDiv.appendChild(newContent);
+
+
+                    leftSideDiv.append(newDiv);
+
+
+                }
+
+            </script>
+
+
+    </body>
+</html>
