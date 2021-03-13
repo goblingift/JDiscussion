@@ -1,0 +1,157 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="library_includes :: frontend_libraries" />
+    <body>
+        <div class="float-right">
+            <a role="button" class="btn btn-link" href="/home">Zum Hauptmenü</a>
+        </div>
+
+        <div class="container-fluid" style="margin-top: 20px;">
+
+            <div th:if="${display_success}" class="alert alert-success" id="success-alert" role="alert">
+                Argument erfolgreich gespeichert!
+            </div>
+
+            <div>
+                <h3 class="mb-4">Neues Argument anlegen:</h3>
+            </div>
+
+            <form id="form_argument" th:action="@{/argument/add}" th:object="${newArgument}" method="POST">
+                <div class="form-group">
+                    <a class="text-headline">Argument (Max. 20 Zeichen):</a> 
+                    <textarea id="argument-input" th:type="text" th:maxlength="20" th:field="*{argument}" required="required" class="form-control"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <div>
+                                <a class="text-headline">Kategorie:</a>
+                                <p class="font-weight-light">Zu welcher Kategorie passt das Argument am besten?</p>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text color-economic">
+                                        <label class="radio-inline" for="rb_category_1">
+                                            <span>Ökonomisch</span>
+                                            <input type="radio" name="rb_answer" id="rb_category_1" th:field="*{category}"  value="1" required="required" aria-label="Radio button for following text input">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text color-ecologic">
+                                        <label class="radio-inline" for="rb_category_2">
+                                            <span>Ökologisch</span>
+                                            <input type="radio" name="rb_answer" id="rb_category_2" th:field="*{category}" value="2" required="required" aria-label="Radio button for following text input">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text color-social">
+                                        <label class="radio-inline" for="rb_category_3">
+                                            <span>Sozial</span>
+                                            <input type="radio" name="rb_answer" id="rb_category_3" th:field="*{category}" value="3" required="required" aria-label="Radio button for following text input">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <div>
+                                <a class="text-headline">Gewichtung:</a>
+                                <p class="font-weight-light">(1 = schaches Argument | 3 = starkes, wichtiges Argument)</p>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <label class="radio-inline" for="rb_weight_1">
+                                            <span>1 - Leicht</span>
+                                            <input type="radio" name="rb_answer" id="rb_weight_1" th:field="*{weight}"  value="1" required="required" aria-label="Radio button for following text input">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <label class="radio-inline" for="rb_weight_2">
+                                            <span>2 - Mittel</span>
+                                            <input type="radio" name="rb_answer" id="rb_weight_2" th:field="*{weight}" value="2" required="required" aria-label="Radio button for following text input">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <label class="radio-inline" for="rb_weight_3">
+                                            <span>3 - Stark</span>
+                                            <input type="radio" name="rb_answer" id="rb_weight_3" th:field="*{weight}" value="3" required="required" aria-label="Radio button for following text input">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col" align="center">
+                        <button name="submit" type="submit" class="btn btn-success" style="height: 60px; width: 50%;">Speichern</button>
+                    </div>
+                </div>
+            </form>
+
+            <hr style="margin: 80px;">
+                <h3 class="mb-4">Übersicht gesammelter Argumente deiner Gruppe:</h3>
+
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">List group item heading</h5>
+                            <small>3 days ago</small>
+                        </div>
+                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                        <small>Donec id elit non mi porta.</small>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">List group item heading</h5>
+                            <small class="text-muted">3 days ago</small>
+                        </div>
+                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                        <small class="text-muted">Donec id elit non mi porta.</small>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">List group item heading</h5>
+                            <small class="text-muted">3 days ago</small>
+                        </div>
+                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                        <small class="text-muted">Donec id elit non mi porta.</small>
+                    </a>
+                </div>
+
+
+        </div>
+
+    </body>
+
+    <script th:inline="javascript">
+        $("#success-alert").fadeTo(3000, 500).slideUp(500, function () {
+            $("#success-alert").slideUp(500);
+        });
+    </script>
+</html>
