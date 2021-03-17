@@ -360,6 +360,8 @@
         function addBox(proOrContra, weight, text, category, id) {
 
         console.log("Entered addBox");
+        
+        
           var targetDiv;
           if (proOrContra == 1) {
             targetDiv = document.getElementById("left-side-" + weight);
@@ -375,8 +377,11 @@
           var newDiv = document.querySelector("div[id='argument-example']").cloneNode(true);
           newDiv.id = id;
           newDiv.querySelector("div.field-argument").textContent = text;
-
+          
+          console.log("Before trash");
+          console.log(newDiv);
           newDiv.querySelector("i.fa-trash-alt").setAttribute("onClick", "removeArgument(" + id + ");");
+          console.log("after trash");
           newDiv.querySelector("i.fa-arrow-alt-circle-left").setAttribute("onClick", "moveArgument(" + id + ", true);");
           newDiv.querySelector("i.fa-arrow-alt-circle-right").setAttribute("onClick", "moveArgument(" + id + ", false);");
 
