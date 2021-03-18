@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  *
  * @author andre
  */
-public interface ArgumentRepository extends MongoRepository<Argument, String>{
+public interface ArgumentRepository extends MongoRepository<Argument, Long>{
     
     List<Argument> findByGroupId(Long groupId);
     

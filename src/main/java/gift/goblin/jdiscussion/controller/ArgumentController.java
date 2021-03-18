@@ -42,7 +42,7 @@ public class ArgumentController {
 
     @Autowired
     ArgumentRepository argumentRepository;
-    
+
     @Autowired
     UserGroupRepository userGroupRepository;
 
@@ -108,13 +108,14 @@ public class ArgumentController {
     @GetMapping(value = "/delete/{id}")
     public String removeArgument(@PathVariable("id") String id, Authentication authentication, Model model, HttpSession session) {
         logger.info("Called removeArgument for id: {}", id);
+        long parsedId = Long.parseLong(id);
         // First, check if this argument exists and identify which group it has created
-        Optional<Argument> optArgument = argumentRepository.findById(id);
+        Optional<Argument> optArgument = argumentRepository.findById(parsedId);
 
         if (optArgument.isPresent()) {
             Long groupIdArgument = optArgument.get().getGroupId();
             Long groupId = 0L;
-            
+
             Optional<Integer> optGroupNumberUser = sessionManager.tryToGetGroupNumber(session);
             if (optGroupNumberUser.isPresent()) {
                 Optional<UserGroup> optUserGroup = userGroupRepository.findByNumber(optGroupNumberUser.get());
@@ -122,25 +123,45 @@ public class ArgumentController {
                     groupId = optUserGroup.get().getId();
                 }
             }
-            
+
             logger.info("groupIdArgument " + groupIdArgument);
             logger.info("optGroupNumberUser " + optGroupNumberUser);
-            
+
             if (isUserAdmin(authentication)) {
-                logger.info("Will remove argument (By admin-user) with id {}", id);
-                argumentRepository.deleteById(id);
+                logger.info("Will remove argument (By admin-user) with id {}", parsedId);
+                argumentRepository.deleteById(parsedId);
                 //return true;
-            } else if (groupIdArgument.equals(groupId))  {
+            } else if (groupIdArgument.equals(groupId)) {
                 // If user is part of the group which created argument, delete em
-                logger.info("Will delete argument {} by user {}", id, authentication.getName());
-                argumentRepository.deleteById(id);
+                logger.info("Will delete argument {} by user {}", parsedId, authentication.getName());
+                argumentRepository.deleteById(parsedId);
                 //return true;
             } else {
                 //return false;
             }
         } else {
-            logger.warn("Couldnt find any arguments with id: {}", id);
+            logger.warn("Couldnt find any arguments with id: {}", parsedId);
             //return false;
+        }
+
+        
+        return "redirect:/argument/new";
+    }
+
+    @GetMapping(value = "/changeWeight/{id}/{newWeight}")
+    public String changeWeight(@PathVariable("id") String id, @PathVariable("newWeight") String newWeight, Authentication authentication, Model model, HttpSession session) {
+        logger.info("Called changeWeight for id: {}", id);
+        long parsedId = Long.parseLong(id);
+        // First, check if this argument exists and identify which group it has created
+        Optional<Argument> optArgument = argumentRepository.findById(parsedId);
+
+        if (optArgument.isPresent()) {
+            Argument argument = optArgument.get();
+            argument.setWeight(Byte.parseByte(newWeight));
+            argumentRepository.save(argument);
+            logger.info("Successful updated argument ({}) with new weight: {}", id, newWeight);
+        } else {
+            logger.warn("Couldnt find any arguments with id: {}", parsedId);
         }
         
         return "redirect:/argument/new";

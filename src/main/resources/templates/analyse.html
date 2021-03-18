@@ -139,7 +139,19 @@
         function moveArgumentToAnotherColumn(oldColumnId, newColumnId, argumentId, newWeight) {
           console.log("Will change argument " + argumentId + " to weight " + newWeight + " and move to column " + newColumnId);
 
-          // TODO: Backend Call
+          var jqxhr = $.get( "/argument/changeWeight/" + argumentId + "/" + newWeight, function() {
+                  console.log("Triggered change-weight of argument:" + argumentId);
+                })
+                  .done(function() {
+                    
+                  })
+                  .fail(function() {
+                    alert( "error" );
+                    
+                  })
+                  .always(function() {
+                    console.log("Finished change weight backend update for argument:" + argumentId);
+                  });
 
           var hiddenDiv = $("div[data-id=" + argumentId + "]");
           hiddenDiv.data("weight", newWeight);
@@ -168,7 +180,19 @@
 
         function removeArgument(id) {
 
-          // TODO: Backend call
+          var jqxhr = $.get( "/argument/delete/" + id, function() {
+                  console.log("Triggered deletion of argument:" + id);
+                })
+                  .done(function() {
+                    
+                  })
+                  .fail(function() {
+                    alert( "error" );
+                    
+                  })
+                  .always(function() {
+                    console.log("Finished deletion process of argument:" + id);
+                  });
 
           var hiddenDiv = $("div[data-id=" + id + "]");
           // remove the hidden element in data-div
