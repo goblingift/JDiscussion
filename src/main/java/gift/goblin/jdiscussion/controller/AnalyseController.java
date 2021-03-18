@@ -55,8 +55,8 @@ public class AnalyseController {
         
         for (int i = 1; i <= 4; i++) {
             List<Argument> args = argumentRepository.findByGroupId(sessionManager.getGroupId(i));
-            model.addAttribute("arguments-" + i, args);
-            System.out.println("Added arguments:" + i);
+            model.addAttribute("arguments_" + i, args);
+            System.out.println("Added arguments:" + i + " : " + args);
         }
 
         model.addAttribute("createArguments", gameStatus.isCreateArguments());

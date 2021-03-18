@@ -25,6 +25,19 @@
                 </div>
 
                 <div class="row">
+                    
+                    <div class="col">
+                        <div class="form-group">
+                            <div>
+                                <a class="text-headline">Pro oder Kontra:</a>
+                                <p class="font-weight-light">Pro-Argument (blau) / Kontra-Argument (weiß)</p>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="checkbox" data-on="Pro" data-off="Kontra" data-toggle="toggle" th:field="*{proArgument}"/>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="col">
                         <div class="form-group">
                             <div>
@@ -125,9 +138,10 @@
                         <h4>Ökonomische Argumente:</h4>
                         <div class="list-group" th:each="actObject,iterStat : ${economicArguments}">
                             
-                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start color-economic">
+                            <a class="list-group-item list-group-item-action flex-column align-items-start color-economic">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1" th:text="${actObject.argument}"></h5>
+                                    <i class="far fa-trash-alt fa-lg" onclick="removeArgument(this.id)"></i>
                                     <small class="text-muted">3 days ago</small>
                                 </div>
                                 <p class="mb-1"></p>
@@ -150,9 +164,10 @@
                         <h4>Ökologische Argumente:</h4>
                         <div class="list-group" th:each="actObject,iterStat : ${ecologicArguments}">
                             
-                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start color-ecologic">
+                            <a class="list-group-item list-group-item-action flex-column align-items-start color-ecologic">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1" th:text="${actObject.argument}"></h5>
+                                    <i class="far fa-trash-alt fa-lg" onclick="removeArgument(this.id)"></i>
                                     <small class="text-muted">3 days ago</small>
                                 </div>
                                 <p class="mb-1"></p>
@@ -175,9 +190,10 @@
                         <h4>Soziale Argumente:</h4>
                         <div class="list-group" th:each="actObject,iterStat : ${socialArguments}">
                             
-                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start color-social">
+                            <a class="list-group-item list-group-item-action flex-column align-items-start color-social">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1" th:text="${actObject.argument}"></h5>
+                                    <i class="far fa-trash-alt fa-lg" onclick="removeArgument(this.id)"></i>
                                     <small class="text-muted">3 days ago</small>
                                 </div>
                                 <p class="mb-1"></p>

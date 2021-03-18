@@ -35,7 +35,7 @@ public class SessionManager {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Optional<Integer> tryToGetGroupNumber(HttpSession session) {
-
+        
         Optional<Integer> optGroupNumber = Optional.empty();
 
         Object attribute = session.getAttribute(SESSION_FIELD_GROUPNUMBER);

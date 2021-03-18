@@ -28,21 +28,24 @@
                 </div>
             </div>
             <div class="argument-data-group-1">
-                <div class="argument" data-id="100001" data-weight="1" data-category="1" data-pro="1" data-argument="Kaffebohnen"></div>
-                <div class="argument" data-id="100077" data-weight="1" data-category="1" data-pro="1" data-argument="Kakao"></div>
-                <div class="argument" data-id="100002" data-weight="2" data-category="2" data-pro="1" data-argument="Müllabfuhr"></div>
-                <div class="argument" data-id="100040" data-weight="3" data-category="2" data-pro="1" data-argument="Gartenwasser"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_1}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument}" th:data-argument="${actArgument.argument}"></div>
             </div>
             <div class="argument-data-group-2">
-                <div class="argument" data-id="100021" data-weight="3" data-category="3" data-pro="2" data-argument="Dicke Karre"></div>
-                <div class="argument" data-id="100421" data-weight="2" data-category="3" data-pro="2" data-argument="Wasserski"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_2}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument}" th:data-argument="${actArgument.argument}"></div>
+            </div>
+            <div class="argument-data-group-3">
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_3}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument}" th:data-argument="${actArgument.argument}"></div>
+            </div>
+            <div class="argument-data-group-4">
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_4}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument}" th:data-argument="${actArgument.argument}"></div>
             </div>
         </div>
 
 
         <button onclick="addArguments(1)" id="button_arguments_1" type="button">Add Arg. - 1</button>
         <button onclick="addArguments(2)" id="button_arguments_2" type="button">Add Arg. - 2</button>
-
+        <button onclick="addArguments(3)" id="button_arguments_3" type="button">Add Arg. - 3</button>
+        <button onclick="addArguments(4)" id="button_arguments_4" type="button">Add Arg. - 4</button>
 
 
         <div id=scale-top>
@@ -350,8 +353,6 @@
         function makeOldArgumentsGrey() {
           $("div.box").addClass("greyed-out");
         }
-
-
 
         // proOrContra: left = 1, right = 2
         // weight: 1 (Inner), 2, 3 (Outer)
