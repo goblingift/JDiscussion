@@ -78,8 +78,7 @@ public class ArgumentController {
     @PostMapping(value = {"/add"})
     public String addQuizcard(@ModelAttribute("newArgument") Argument newArgument, BindingResult bindingResult, Model model, HttpSession session) {
 
-        UUID randomUUID = UUID.randomUUID();
-        newArgument.setId(randomUUID.toString());
+        newArgument.setId(System.currentTimeMillis());
 
         Optional<Integer> optGroupNumber = sessionManager.tryToGetGroupNumber(session);
         if (optGroupNumber.isPresent()) {

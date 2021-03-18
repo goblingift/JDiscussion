@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Argument {
     
     @Id
-    private String id;
+    private Long id;
     
     /**
      * true if pro-argument, false if contra-argument.
@@ -42,11 +42,11 @@ public class Argument {
      */
     private Long groupId;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

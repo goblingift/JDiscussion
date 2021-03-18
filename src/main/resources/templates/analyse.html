@@ -28,16 +28,16 @@
                 </div>
             </div>
             <div class="argument-data-group-1">
-                <div class="argument" th:each="actArgument,iterStat : ${arguments_1}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument}" th:data-argument="${actArgument.argument}"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_1}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}"></div>
             </div>
             <div class="argument-data-group-2">
-                <div class="argument" th:each="actArgument,iterStat : ${arguments_2}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument}" th:data-argument="${actArgument.argument}"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_2}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}"></div>
             </div>
             <div class="argument-data-group-3">
-                <div class="argument" th:each="actArgument,iterStat : ${arguments_3}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument}" th:data-argument="${actArgument.argument}"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_3}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}"></div>
             </div>
             <div class="argument-data-group-4">
-                <div class="argument" th:each="actArgument,iterStat : ${arguments_4}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument}" th:data-argument="${actArgument.argument}"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_4}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}"></div>
             </div>
         </div>
 
@@ -106,7 +106,7 @@
           var rightSide = oldColumnId.startsWith("right");
           console.log(newArgumentWeight);
 
-                var targetColumnId = oldColumnId;
+          var targetColumnId = oldColumnId;
           // user clicked to the left button:
           if (toTheLeft == true) {
                 targetColumnId = oldColumn.previousElementSibling.id;
