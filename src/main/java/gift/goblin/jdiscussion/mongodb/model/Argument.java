@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Argument {
     
     @Id
-    private String id;
+    private Long id;
     
     /**
      * true if pro-argument, false if contra-argument.
@@ -36,12 +36,17 @@ public class Argument {
     private Byte category;
     
     private String argument;
+    
+    /**
+     * Relationship, to which group this argument should be included.
+     */
+    private Long groupId;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -77,7 +82,13 @@ public class Argument {
         this.argument = argument;
     }
 
-    
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
 
     @Override
     public String toString() {

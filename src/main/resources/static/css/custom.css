@@ -32,14 +32,18 @@ All rights reserved
     padding: 5px;
 }
 
-div.color-economic {
+div.color-economic, a.color-economic {
     background-color: cornflowerblue;
 }
 
-div.color-ecologic {
+div.color-ecologic, a.color-ecologic {
     background-color: lightgreen;
 }
 
-div.color-social {
+div.color-social, a.color-social {
     background-color: lightsalmon;
+}
+
+i.fa-trash-alt, svg.fa-trash-alt {
+    cursor: pointer;
 }

@@ -1,0 +1,118 @@
+/*
+Copyright (C) 2020 Andre Kessler (https://github.com/goblingift)
+All rights reserved
+*/
+/* 
+    Created on : 13.03.2021, 17:39:28
+    Author     : andre
+*/
+
+
+#scale-top {
+  height: 20px;
+  width: 1400px;
+  background: black;
+  position: absolute;
+  left: 135px;
+  bottom: 187px;
+  transform: rotate(0deg);
+  z-index: 1;
+  animation: scale-top 5s infinite alternate-reverse;
+}
+
+body {
+  overflow: hidden;
+}
+
+#triangle {
+  position: absolute;
+  bottom: -280px;
+  left: 430px;
+  height: 0;
+  width: 0;
+  border-top: 0px;
+  border-left: 300px solid transparent;
+  border-bottom: 300px solid transparent;
+  border-right: 300px solid red;
+  transform: rotate(-45deg);
+  z-index: 0;
+}
+
+.box {
+  background: green;
+  position: absolute;
+  bottom: 20px;
+  height: 50px;
+  width:  200px;
+}
+
+#left-side-main {
+	float: left;
+}
+
+.side {
+ 		 float: left;
+     width: 32%;
+     margin-right: 2%;
+     padding: 20px;
+}
+
+
+#left-side-1 > .box{
+  left: 460px;
+}
+
+#left-side-3 i.fa-arrow-alt-circle-left,
+#left-side-1 i.fa-arrow-alt-circle-right,
+#right-side-1 i.fa-arrow-alt-circle-left,
+#right-side-3 i.fa-arrow-alt-circle-right {
+  opacity: 30%;
+  cursor: not-allowed;
+  display: none;
+}
+
+#left-side-2 > .box{
+  left: 230px;
+}
+#left-side-3 > .box{
+  left: 0px;
+}
+
+#right-side-1 > .box{
+  left: 740px;
+}
+#right-side-2 > .box{
+  left: 970px;
+}
+#right-side-3 > .box{
+  left: 1200px;
+}
+
+div.greyed-out{
+  opacity: 70%;
+}
+
+.box i:not(.fa-disabled){
+  cursor: pointer;
+}
+
+.fa-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+div.argument-data-div {
+  display: none;
+}
+
+div.color-economic, a.color-economic {
+    background-color: cornflowerblue;
+}
+
+div.color-ecologic, a.color-ecologic {
+    background-color: lightgreen;
+}
+
+div.color-social, a.color-social {
+    background-color: lightsalmon;
+}

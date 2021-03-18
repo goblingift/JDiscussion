@@ -3,6 +3,10 @@
     <body>
 
         <div class="container-fluid" style="margin-top: 20px;">
+            
+            <div th:if="${groupNumber != null}">
+                <h3>Gruppe: <a th:text="${groupNumber}" />: <a th:text="${groupName}" /></h3>
+            </div>
 
             <div th:if="${createArguments}">
                 <a href="/argument/new">
@@ -14,6 +18,18 @@
                     </div>
                 </a>
             </div>
+            
+            <div th:if="${analysePhase}">
+                <a href="/analyse">
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                            <h1 class="display-4">Argumente Zusammenfassung</h1>
+                            <p class="lead">Hier klicken um die verschiedenen Argumente zu vergleichen</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
             <div th:if="${!createArguments}">
                 <div class="jumbotron jumbotron-fluid">
                     <div class="container">
@@ -44,13 +60,31 @@
                         </div>
                     </a>
                 </div>
+                <div th:if="${!analysePhase}">
+                    <a href="/start-analyse">
+                        <div class="jumbotron jumbotron-fluid">
+                            <div class="container">
+                                <h1 class="display-4">Auswertungsphase beginnen</h1>
+                                <p class="lead">Hier klicken um die Auswertung der Argumente zu beginnen.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div th:if="${analysePhase}">
+                    <a href="/stop-analyse">
+                        <div class="jumbotron jumbotron-fluid">
+                            <div class="container">
+                                <h1 class="display-4">Auswertungsphase stoppen</h1>
+                                <p class="lead">Hier klicken um die Auswertung der Argumente zu beenden.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
-
             <!-- Footer -->
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom">
                 <ul class="navbar-nav mr-auto">
                 </ul>
-
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
                         <a class="light-grey-color" th:text="${build_artifact}" />
@@ -58,7 +92,6 @@
                         <a class="light-grey-color" th:text="${build_version}" />
                     </li>
                 </ul>
-
                 <ul class="navbar-nav ml-auto">
                 </ul>
             </nav>
