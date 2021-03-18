@@ -7,7 +7,9 @@ package gift.goblin.jdiscussion.controller;
 import gift.goblin.jdiscussion.WebSecurityConfig;
 import gift.goblin.jdiscussion.bean.SessionManager;
 import gift.goblin.jdiscussion.mongodb.model.Argument;
+import gift.goblin.jdiscussion.mongodb.model.UserGroup;
 import gift.goblin.jdiscussion.mongodb.repo.ArgumentRepository;
+import gift.goblin.jdiscussion.mongodb.repo.UserGroupRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.HttpClientErrorException;
 
 /**
  *
@@ -41,28 +44,29 @@ public class ArgumentController {
     ArgumentRepository argumentRepository;
     
     @Autowired
+    UserGroupRepository userGroupRepository;
+
+    @Autowired
     SessionManager sessionManager;
-    
-    
 
     @GetMapping(value = {"/new"})
     public String renderMainMenu(HttpSession session, Model model) {
 
         logger.info("User opened argument-creation overview.");
-        
+
         Optional<Integer> optGroupNumber = sessionManager.tryToGetGroupNumber(session);
         if (optGroupNumber.isPresent()) {
             Long groupId = sessionManager.getGroupId(optGroupNumber.get());
-            
+
             List<Argument> arguments = argumentRepository.findByGroupId(groupId);
             List<Argument> economicArguments = arguments.stream().filter(a -> a.getCategory() == 1).collect(Collectors.toList());
             List<Argument> ecologicArguments = arguments.stream().filter(a -> a.getCategory() == 2).collect(Collectors.toList());
             List<Argument> socialArguments = arguments.stream().filter(a -> a.getCategory() == 3).collect(Collectors.toList());
-            
+
             model.addAttribute("economicArguments", economicArguments);
             model.addAttribute("ecologicArguments", ecologicArguments);
             model.addAttribute("socialArguments", socialArguments);
-            
+
             model.addAttribute("groupNumber", optGroupNumber.get());
             model.addAttribute("groupName", sessionManager.getGroupName(optGroupNumber.get()));
         }
@@ -70,22 +74,21 @@ public class ArgumentController {
         model.addAttribute("newArgument", new Argument());
         return "add_argument";
     }
-    
 
     @PostMapping(value = {"/add"})
     public String addQuizcard(@ModelAttribute("newArgument") Argument newArgument, BindingResult bindingResult, Model model, HttpSession session) {
 
         UUID randomUUID = UUID.randomUUID();
         newArgument.setId(randomUUID.toString());
-        
+
         Optional<Integer> optGroupNumber = sessionManager.tryToGetGroupNumber(session);
         if (optGroupNumber.isPresent()) {
             Long groupId = sessionManager.getGroupId(optGroupNumber.get());
             newArgument.setGroupId(groupId);
         }
-        
+
         logger.info("Create new argument in database (UUID was created randomized): {}", newArgument);
-        
+
         argumentRepository.save(newArgument);
 
         model.addAttribute("display_success", true);
@@ -93,16 +96,55 @@ public class ArgumentController {
         return "redirect:/argument/new";
     }
 
+    /**
+     * Will try to delete an argument by its id.
+     *
+     * @param id id of the argument.
+     * @param authentication contains user informations.
+     * @param model
+     * @param session
+     * @return true if successful deleted, false if not found, no rights or
+     * something went wrong.
+     */
     @GetMapping(value = "/delete/{id}")
-    public String removeArgument(@PathVariable("id") String id, Authentication authentication, Model model) {
-        if (!isUserAdmin(authentication)) {
-            logger.info("User tried to delete quizcards, without the required rights- redirect to startpage.");
-            return "redirect:/home";
+    public String removeArgument(@PathVariable("id") String id, Authentication authentication, Model model, HttpSession session) {
+        logger.info("Called removeArgument for id: {}", id);
+        // First, check if this argument exists and identify which group it has created
+        Optional<Argument> optArgument = argumentRepository.findById(id);
+
+        if (optArgument.isPresent()) {
+            Long groupIdArgument = optArgument.get().getGroupId();
+            Long groupId = 0L;
+            
+            Optional<Integer> optGroupNumberUser = sessionManager.tryToGetGroupNumber(session);
+            if (optGroupNumberUser.isPresent()) {
+                Optional<UserGroup> optUserGroup = userGroupRepository.findByNumber(optGroupNumberUser.get());
+                if (optUserGroup.isPresent()) {
+                    groupId = optUserGroup.get().getId();
+                }
+            }
+            
+            logger.info("groupIdArgument " + groupIdArgument);
+            logger.info("optGroupNumberUser " + optGroupNumberUser);
+            
+            if (isUserAdmin(authentication)) {
+                logger.info("Will remove argument (By admin-user) with id {}", id);
+                argumentRepository.deleteById(id);
+                //return true;
+            } else if (groupIdArgument.equals(groupId))  {
+                // If user is part of the group which created argument, delete em
+                logger.info("Will delete argument {} by user {}", id, authentication.getName());
+                argumentRepository.deleteById(id);
+                //return true;
+            } else {
+                //return false;
+            }
         } else {
-            logger.info("Will remove argument with id {}", id);
-            argumentRepository.deleteById(id);
-            return "redirect:/argument/new";
+            logger.warn("Couldnt find any arguments with id: {}", id);
+            //return false;
         }
+        
+        return "redirect:/argument/new";
     }
 
     private boolean isUserAdmin(Authentication authentication) {

@@ -141,8 +141,9 @@
                             <a class="list-group-item list-group-item-action flex-column align-items-start color-economic">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1" th:text="${actObject.argument}"></h5>
-                                    <i class="far fa-trash-alt fa-lg" onclick="removeArgument(this.id)"></i>
-                                    <small class="text-muted">3 days ago</small>
+                                    <i class="far fa-trash-alt fa-lg" th:onclick="deleteArgument([[${actObject.id}]])"></i>
+                                    <small th:if="${actObject.proArgument}" class="text-muted">PRO-Argument</small>
+                                    <small th:unless="${actObject.proArgument}" class="text-muted">KONTRA-Argument</small>
                                 </div>
                                 <p class="mb-1"></p>
                                 <th:block th:switch="${actObject.weight}">
@@ -167,8 +168,9 @@
                             <a class="list-group-item list-group-item-action flex-column align-items-start color-ecologic">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1" th:text="${actObject.argument}"></h5>
-                                    <i class="far fa-trash-alt fa-lg" onclick="removeArgument(this.id)"></i>
-                                    <small class="text-muted">3 days ago</small>
+                                    <i class="far fa-trash-alt fa-lg" th:onclick="deleteArgument([[${actObject.id}]])"></i>
+                                    <small th:if="${actObject.proArgument}" class="text-muted">PRO-Argument</small>
+                                    <small th:unless="${actObject.proArgument}" class="text-muted">KONTRA-Argument</small>
                                 </div>
                                 <p class="mb-1"></p>
                                 <th:block th:switch="${actObject.weight}">
@@ -193,8 +195,9 @@
                             <a class="list-group-item list-group-item-action flex-column align-items-start color-social">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1" th:text="${actObject.argument}"></h5>
-                                    <i class="far fa-trash-alt fa-lg" onclick="removeArgument(this.id)"></i>
-                                    <small class="text-muted">3 days ago</small>
+                                    <i class="far fa-trash-alt fa-lg" th:onclick="deleteArgument([[${actObject.id}]])"></i>
+                                    <small th:if="${actObject.proArgument}" class="text-muted">PRO-Argument</small>
+                                    <small th:unless="${actObject.proArgument}" class="text-muted">KONTRA-Argument</small>
                                 </div>
                                 <p class="mb-1"></p>
                                 <th:block th:switch="${actObject.weight}">
@@ -218,5 +221,26 @@
         $("#success-alert").fadeTo(3000, 500).slideUp(500, function () {
             $("#success-alert").slideUp(500);
         });
+        
+        function deleteArgument(id) {
+            
+            console.log(id);
+            
+            var jqxhr = $.get( "/argument/delete/" + id, function() {
+                  console.log("Triggered deletion of argument:" + id);
+                })
+                  .done(function() {
+                    location.reload();
+                  })
+                  .fail(function() {
+                    alert( "error" );
+                    location.reload();
+                  })
+                  .always(function() {
+                    console.log("Finished deletion process of argument:" + id);
+                  });
+        }
+        
+        
     </script>
 </html>
