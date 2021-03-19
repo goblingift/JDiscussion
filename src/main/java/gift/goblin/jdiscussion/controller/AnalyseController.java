@@ -45,6 +45,9 @@ public class AnalyseController {
         if (sessionManager.isUserAdmin(authentication)) {
             logger.info("User has admin-role, display more options for em.");
             model.addAttribute("isAdmin", true);
+        } else {
+            logger.warn("Non admin-user tried to open analyse- redirect to home!");
+            return "redirect:/home";
         }
 
         Optional<Integer> optGroupNumber = sessionManager.tryToGetGroupNumber(session);
