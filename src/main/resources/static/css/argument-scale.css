@@ -116,3 +116,20 @@ div.color-ecologic, a.color-ecologic {
 div.color-social, a.color-social {
     background-color: lightsalmon;
 }
+
+div.big-grey-text {
+  position: absolute;
+  bottom: 80px;
+  height: 0;
+  width: 0;
+  font-size: x-large;
+  color: lightgrey;
+}
+
+#text-category-pro {
+  left: 600px;
+}
+
+#text-category-contra {
+  left: 1050px;
+}
