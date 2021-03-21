@@ -59,9 +59,15 @@ public class AnalyseController {
         for (int i = 1; i <= 4; i++) {
             List<Argument> args = argumentRepository.findByGroupId(sessionManager.getGroupId(i));
             model.addAttribute("arguments_" + i, args);
-            System.out.println("Added arguments:" + i + " : " + args);
+            logger.debug("Added arguments to view:" + i + " : " + args);
         }
-
+        List<Argument> adminArguments = argumentRepository.findByGroupId(SessionManager.GROUP_ID_ADMIN);
+        if (!adminArguments.isEmpty()) {
+            model.addAttribute("arguments_admin", adminArguments);
+            logger.debug("Added admin-arguments to view: " + adminArguments);
+        }
+        
+        model.addAttribute("newArgument", new Argument());
         model.addAttribute("createArguments", gameStatus.isCreateArguments());
         model.addAttribute("analysePhase", gameStatus.isAnalyseArguments());
         return "analyse";

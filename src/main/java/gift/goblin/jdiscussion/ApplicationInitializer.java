@@ -34,6 +34,7 @@ public class ApplicationInitializer implements InitializingBean {
         generateUserGroup2IfNotExists(allUserGroups);
         generateUserGroup3IfNotExists(allUserGroups);
         generateUserGroup4IfNotExists(allUserGroups);
+        generateUserGroupAdminIfNotExists(allUserGroups);
     }
 
     private void generateUserGroup1IfNotExists(List<UserGroup> allUserGroups) {
@@ -65,6 +66,14 @@ public class ApplicationInitializer implements InitializingBean {
             UserGroup newUserGroup = new UserGroup(SessionManager.GROUP_ID_4, 4, SessionManager.GROUP_DESCR_4);
             userGroupRepository.save(newUserGroup);
             logger.info("UserGroup-{} ({}) was created, because it didnt exist in DB.", newUserGroup.getNumber(), newUserGroup.getDescription());
+        }
+    }
+
+    private void generateUserGroupAdminIfNotExists(List<UserGroup> allUserGroups) {
+        if (allUserGroups.stream().noneMatch(ug -> SessionManager.GROUP_ID_ADMIN == ug.getId())) {
+            UserGroup newUserGroup = new UserGroup(SessionManager.GROUP_ID_ADMIN, 99, SessionManager.GROUP_DESCR_ADMIN);
+            userGroupRepository.save(newUserGroup);
+            logger.info("UserGroup for admin-{} ({}) was created, because it didnt exist in DB.", newUserGroup.getNumber(), newUserGroup.getDescription());
         }
     }
 

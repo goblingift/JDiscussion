@@ -78,12 +78,16 @@ public class ArgumentController {
     @PostMapping(value = {"/add"})
     public String addQuizcard(@ModelAttribute("newArgument") Argument newArgument, BindingResult bindingResult, Model model, HttpSession session) {
 
-        newArgument.setId(System.currentTimeMillis());
+        if (newArgument.getId() == null || newArgument.getId() == 0) {
+            newArgument.setId(System.currentTimeMillis());
+        }
 
-        Optional<Integer> optGroupNumber = sessionManager.tryToGetGroupNumber(session);
-        if (optGroupNumber.isPresent()) {
-            Long groupId = sessionManager.getGroupId(optGroupNumber.get());
-            newArgument.setGroupId(groupId);
+        if (newArgument.getGroupId() == null || newArgument.getGroupId() == 0) {
+            Optional<Integer> optGroupNumber = sessionManager.tryToGetGroupNumber(session);
+            if (optGroupNumber.isPresent()) {
+                Long groupId = sessionManager.getGroupId(optGroupNumber.get());
+                newArgument.setGroupId(groupId);
+            }
         }
 
         logger.info("Create new argument in database (UUID was created randomized): {}", newArgument);
@@ -144,7 +148,6 @@ public class ArgumentController {
             //return false;
         }
 
-        
         return "redirect:/argument/new";
     }
 
@@ -163,7 +166,7 @@ public class ArgumentController {
         } else {
             logger.warn("Couldnt find any arguments with id: {}", parsedId);
         }
-        
+
         return "redirect:/argument/new";
     }
 
