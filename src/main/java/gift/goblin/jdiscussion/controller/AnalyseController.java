@@ -7,6 +7,8 @@ package gift.goblin.jdiscussion.controller;
 import gift.goblin.jdiscussion.bean.SessionManager;
 import gift.goblin.jdiscussion.dto.GameStatus;
 import gift.goblin.jdiscussion.mongodb.model.Argument;
+import gift.goblin.jdiscussion.mongodb.model.ArgumentLikes;
+import gift.goblin.jdiscussion.mongodb.repo.ArgumentLikesRepository;
 import gift.goblin.jdiscussion.mongodb.repo.ArgumentRepository;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.context.request.RequestContextHolder;
 
 /**
  *
@@ -36,6 +39,9 @@ public class AnalyseController {
     
     @Autowired
     private ArgumentRepository argumentRepository;
+    
+    @Autowired
+    private ArgumentLikesRepository argumentLikesRepository;
 
     @GetMapping(value = "/analyse")
     public String renderAnalyseView(HttpSession session, Model model, Authentication authentication) {
@@ -46,8 +52,7 @@ public class AnalyseController {
             logger.info("User has admin-role, display more options for em.");
             model.addAttribute("isAdmin", true);
         } else {
-            logger.warn("Non admin-user tried to open analyse- redirect to home!");
-            return "redirect:/home";
+            model.addAttribute("isAdmin", false);
         }
 
         Optional<Integer> optGroupNumber = sessionManager.tryToGetGroupNumber(session);
@@ -58,19 +63,32 @@ public class AnalyseController {
         
         for (int i = 1; i <= 4; i++) {
             List<Argument> args = argumentRepository.findByGroupId(sessionManager.getGroupId(i));
+            enrichArgumentsWithLikes(args);
             model.addAttribute("arguments_" + i, args);
-            logger.debug("Added arguments to view:" + i + " : " + args);
+            logger.info("Added arguments to view:" + i + " : " + args);
         }
         List<Argument> adminArguments = argumentRepository.findByGroupId(SessionManager.GROUP_ID_ADMIN);
         if (!adminArguments.isEmpty()) {
+            enrichArgumentsWithLikes(adminArguments);
             model.addAttribute("arguments_admin", adminArguments);
-            logger.debug("Added admin-arguments to view: " + adminArguments);
+            logger.info("Added admin-arguments to view: " + adminArguments);
         }
         
+        model.addAttribute("sessionId", RequestContextHolder.currentRequestAttributes().getSessionId());
         model.addAttribute("newArgument", new Argument());
         model.addAttribute("createArguments", gameStatus.isCreateArguments());
         model.addAttribute("analysePhase", gameStatus.isAnalyseArguments());
         return "analyse";
+    }
+    
+    private void enrichArgumentsWithLikes(List<Argument> arguments) {
+        
+        for (Argument actArgument : arguments) {
+            List<ArgumentLikes> argumentLikes = argumentLikesRepository.findByArgumentId(actArgument.getId());
+            if (!argumentLikes.isEmpty()) {
+                actArgument.setLikes(argumentLikes.size());
+            }
+        }
     }
 
 }

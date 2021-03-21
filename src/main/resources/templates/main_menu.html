@@ -27,18 +27,19 @@
                     </div>
                 </div>
             </div>
-
-            <div th:if="${isAdmin}">
-                <div th:if="${analysePhase}">
-                    <a href="/analyse">
-                        <div class="jumbotron jumbotron-fluid">
-                            <div class="container">
-                                <h1 class="display-4">Argumente Zusammenfassung</h1>
-                                <p class="lead">Hier klicken um die verschiedenen Argumente zu vergleichen</p>
-                            </div>
+            
+            <div th:if="${analysePhase}">
+                <a href="/analyse">
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                            <h1 class="display-4">Argumente Zusammenfassung</h1>
+                            <p class="lead">Hier klicken um die verschiedenen Argumente zu vergleichen</p>
                         </div>
-                    </a>
-                </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div th:if="${isAdmin}">
                 <div th:if="${createArguments}">
                     <a href="/stop-game">
                         <div class="jumbotron jumbotron-fluid">

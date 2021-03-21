@@ -22,7 +22,7 @@ public class JDiscussionApplication {
     @Scope(value = WebApplicationContext.SCOPE_APPLICATION)
     public GameStatus getGameStatus() {
         logger.info("Created new GameStatus-object.");
-        return new GameStatus(true, true, false);
+        return new GameStatus(true, false, false);
     }
 
 }

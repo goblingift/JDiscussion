@@ -14,10 +14,13 @@
                             Example
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col" align="left">
                             <i class="far fa-arrow-alt-circle-left fa-lg" onclick="moveArgument(this.id, true)"></i>
+                        </div>
+                        <div class="col" align="center">
+                            <i class="far fa-star" onclick="likeArgument(this.id)"></i>
+                            <div class="number-circle"></div>
                         </div>
                         <div class="col" align="center">
                             <i class="far fa-trash-alt fa-lg" onclick="removeArgument(this.id)"></i>
@@ -29,155 +32,159 @@
                 </div>
             </div>
             <div class="argument-data-group-1">
-                <div class="argument" th:each="actArgument,iterStat : ${arguments_1}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_1}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}" th:data-likes="${actArgument.likes}"></div>
             </div>
             <div class="argument-data-group-2">
-                <div class="argument" th:each="actArgument,iterStat : ${arguments_2}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_2}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}" th:data-likes="${actArgument.likes}"></div>
             </div>
             <div class="argument-data-group-3">
-                <div class="argument" th:each="actArgument,iterStat : ${arguments_3}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_3}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}" th:data-likes="${actArgument.likes}"></div>
             </div>
             <div class="argument-data-group-4">
-                <div class="argument" th:each="actArgument,iterStat : ${arguments_4}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_4}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}" th:data-likes="${actArgument.likes}"></div>
             </div>
             <div class="argument-data-group-99">
-                <div class="argument" th:each="actArgument,iterStat : ${arguments_admin}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}"></div>
+                <div class="argument" th:each="actArgument,iterStat : ${arguments_admin}" th:data-id="${actArgument.id}" th:data-weight="${actArgument.weight}" th:data-category="${actArgument.category}" th:data-pro="${actArgument.proArgument ? 1 : 2}" th:data-argument="${actArgument.argument}" th:data-likes="${actArgument.likes}"></div>
             </div>
         </div>
 
-        <div class="btn-toolbar mt-2 ml-2" role="toolbar" aria-label="Toolbar with button groups">
-          <div class="btn-group btn-group-lg mr-2" role="group">
-            <button onclick="addArguments(1)" id="button_arguments_1" type="button" class="btn btn-secondary">Gruppe 1</button>
-            <button onclick="addArguments(2)" id="button_arguments_2" type="button" class="btn btn-secondary">Gruppe 2</button>
-            <button onclick="addArguments(3)" id="button_arguments_3" type="button" class="btn btn-secondary">Gruppe 3</button>
-            <button onclick="addArguments(4)" id="button_arguments_4" type="button" class="btn btn-secondary">Gruppe 4</button>
-            <button onclick="addArguments(99)" id="button_arguments_99" type="button" class="btn btn-secondary">Lehrer-Argumente</button>
-          </div>
-          <div class="btn-group btn-group-lg mr-2" role="group">
-            <button type="button" class="btn btn-labeled btn-success" data-toggle="modal" data-target="#modal-dialog-add-argument"><span class="btn-label"><i class="fas fa-plus-circle fa-lg"></i></span>Argument hinzufügen</button>
-          </div>
+        <div th:if="${isAdmin}">
+            <div class="btn-toolbar mt-2 ml-2" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group btn-group-lg mr-2" role="group">
+                    <button onclick="addArguments(1)" id="button_arguments_1" type="button" class="btn btn-secondary">Gruppe 1</button>
+                    <button onclick="addArguments(2)" id="button_arguments_2" type="button" class="btn btn-secondary">Gruppe 2</button>
+                    <button onclick="addArguments(3)" id="button_arguments_3" type="button" class="btn btn-secondary">Gruppe 3</button>
+                    <button onclick="addArguments(4)" id="button_arguments_4" type="button" class="btn btn-secondary">Gruppe 4</button>
+                    <button onclick="addArguments(99)" id="button_arguments_99" type="button" class="btn btn-secondary">Lehrer-Argumente</button>
+                </div>
+                <div class="btn-group btn-group-lg mr-2" role="group">
+                    <button onclick="addAllArguments()" id="button_arguments_all" type="button" class="btn btn-secondary">Alle Anzeigen</button>
+                </div>
+                <div class="btn-group btn-group-lg mr-2" role="group">
+                    <button type="button" class="btn btn-labeled btn-success" data-toggle="modal" data-target="#modal-dialog-add-argument"><span class="btn-label"><i class="fas fa-plus-circle fa-lg"></i></span>Argument hinzufügen</button>
+                </div>
+            </div>
         </div>
-        
-        
+
         <!-- Modal dialog for add new argument -->
         <div class="modal fade" id="modal-dialog-add-argument" tabindex="-1" role="dialog" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Neues Argument hinzufügen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true"></span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form id="form_argument" th:action="@{/argument/add}" th:object="${newArgument}" method="POST">
-                  <div class="form-group">
-                    <a class="text-headline">Argument (Max. 20 Zeichen):</a>
-                    <textarea id="argument-input" th:type="text" th:maxlength="20" th:field="*{argument}" required="required" class="form-control"></textarea>
-                  </div>
-                  <div class="form-group">
-                    <div>
-                      <a class="text-headline">Pro oder Kontra:</a>
-                      <p class="font-weight-light">Pro-Argument (blau) / Kontra-Argument (weiß)</p>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Neues Argument hinzufügen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
                     </div>
-                    <div class="input-group mb-3">
-                      <input type="checkbox" data-on="Pro" data-off="Kontra" data-width="80px" data-toggle="toggle" th:field="*{proArgument}" />
+                    <div class="modal-body">
+                        <form id="form_argument" th:action="@{/argument/add}" th:object="${newArgument}" method="POST">
+                            <div class="form-group">
+                                <a class="text-headline">Argument (Max. 20 Zeichen):</a>
+                                <textarea id="argument-input" th:type="text" th:maxlength="20" th:field="*{argument}" required="required" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <a class="text-headline">Pro oder Kontra:</a>
+                                    <p class="font-weight-light">Pro-Argument (blau) / Kontra-Argument (weiß)</p>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input type="checkbox" data-on="Pro" data-off="Kontra" data-width="80px" data-toggle="toggle" th:field="*{proArgument}" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div>
+                                    <a class="text-headline">Kategorie:</a>
+                                    <p class="font-weight-light">Zu welcher Kategorie passt das Argument am besten?</p>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text color-economic">
+                                            <label class="radio-inline" for="rb_category_1">
+                                                <span>Ökonomisch</span>
+                                                <input type="radio" name="category" id="rb_category_1" th:field="*{category}" value="1" required="required" aria-label="Radio button for following text input">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text color-ecologic">
+                                            <label class="radio-inline" for="rb_category_2">
+                                                <span>Ökologisch</span>
+                                                <input type="radio" name="category" id="rb_category_2" th:field="*{category}" value="2" required="required" aria-label="Radio button for following text input">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text color-social">
+                                            <label class="radio-inline" for="rb_category_3">
+                                                <span>Sozial</span>
+                                                <input type="radio" name="category" id="rb_category_3" th:field="*{category}" value="3" required="required" aria-label="Radio button for following text input">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <a class="text-headline">Gewichtung:</a>
+                                    <p class="font-weight-light">(1 = schaches Argument | 3 = starkes, wichtiges Argument)</p>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <label class="radio-inline" for="rb_weight_1">
+                                                <span>1 - Leicht</span>
+                                                <input type="radio" name="weight" id="rb_weight_1" th:field="*{weight}" value="1" required="required" aria-label="Radio button for following text input">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <label class="radio-inline" for="rb_weight_2">
+                                                <span>2 - Mittel</span>
+                                                <input type="radio" name="weight" id="rb_weight_2" th:field="*{weight}" value="2" required="required" aria-label="Radio button for following text input">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <label class="radio-inline" for="rb_weight_3">
+                                                <span>3 - Stark</span>
+                                                <input type="radio" name="weight" id="rb_weight_3" th:field="*{weight}" value="3" required="required" aria-label="Radio button for following text input">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button name="submit" type="submit" class="btn btn-success" style="height: 60px; width:100%">Speichern</button>
+                        </form>
+
                     </div>
-                  </div>
-
-
-                  <div class="form-group">
-                    <div>
-                      <a class="text-headline">Kategorie:</a>
-                      <p class="font-weight-light">Zu welcher Kategorie passt das Argument am besten?</p>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
                     </div>
-
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text color-economic">
-                          <label class="radio-inline" for="rb_category_1">
-                            <span>Ökonomisch</span>
-                            <input type="radio" name="category" id="rb_category_1" th:field="*{category}" value="1" required="required" aria-label="Radio button for following text input">
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text color-ecologic">
-                          <label class="radio-inline" for="rb_category_2">
-                            <span>Ökologisch</span>
-                            <input type="radio" name="category" id="rb_category_2" th:field="*{category}" value="2" required="required" aria-label="Radio button for following text input">
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text color-social">
-                          <label class="radio-inline" for="rb_category_3">
-                            <span>Sozial</span>
-                            <input type="radio" name="category" id="rb_category_3" th:field="*{category}" value="3" required="required" aria-label="Radio button for following text input">
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <div>
-                      <a class="text-headline">Gewichtung:</a>
-                      <p class="font-weight-light">(1 = schaches Argument | 3 = starkes, wichtiges Argument)</p>
-                    </div>
-
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
-                          <label class="radio-inline" for="rb_weight_1">
-                            <span>1 - Leicht</span>
-                            <input type="radio" name="weight" id="rb_weight_1" th:field="*{weight}" value="1" required="required" aria-label="Radio button for following text input">
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
-                          <label class="radio-inline" for="rb_weight_2">
-                            <span>2 - Mittel</span>
-                            <input type="radio" name="weight" id="rb_weight_2" th:field="*{weight}" value="2" required="required" aria-label="Radio button for following text input">
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
-                          <label class="radio-inline" for="rb_weight_3">
-                            <span>3 - Stark</span>
-                            <input type="radio" name="weight" id="rb_weight_3" th:field="*{weight}" value="3" required="required" aria-label="Radio button for following text input">
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <button name="submit" type="submit" class="btn btn-success" style="height: 60px; width:100%">Speichern</button>
-                </form>
-
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
-              </div>
+                </div>
             </div>
-          </div>
         </div>
-        
-        
+
+
         <div id=scale-top>
             <div id="left-side-main">
 
@@ -222,364 +229,398 @@
 
 
     <script th:inline="javascript">
-    
+
 
         // Moves an argument box one step to the left. This will raise/sink the weight of the arguments, depends on which side it is. Parameter id = argument-id, Parameter toTheLeft = true if user clicked to left button, false if to right button.
         function moveArgument(id, toTheLeft) {
 
-          var hiddenDiv = $("div[data-id=" + id + "]");
+            var hiddenDiv = $("div[data-id=" + id + "]");
 
-          var visibleDiv = document.getElementById(id);
-          var oldColumn = visibleDiv.parentNode;
-          var oldColumnId = oldColumn.id;
-          var oldArgumentWeight = hiddenDiv.data("weight");
-          var newArgumentWeight = oldArgumentWeight;
+            var visibleDiv = document.getElementById(id);
+            var oldColumn = visibleDiv.parentNode;
+            var oldColumnId = oldColumn.id;
+            var oldArgumentWeight = hiddenDiv.data("weight");
+            var newArgumentWeight = oldArgumentWeight;
 
-          var rightSide = oldColumnId.startsWith("right");
-          console.log(newArgumentWeight);
+            var rightSide = oldColumnId.startsWith("right");
+            console.log(newArgumentWeight);
 
-          var targetColumnId = oldColumnId;
-          // user clicked to the left button:
-          if (toTheLeft == true) {
+            var targetColumnId = oldColumnId;
+            // user clicked to the left button:
+            if (toTheLeft == true) {
                 targetColumnId = oldColumn.previousElementSibling.id;
 
-            // if we are on right-side, we want to lower the argument
-            if (rightSide) {
-              newArgumentWeight = oldArgumentWeight - 1;
+                // if we are on right-side, we want to lower the argument
+                if (rightSide) {
+                    newArgumentWeight = oldArgumentWeight - 1;
+                } else {
+                    // we want to raise the argument
+                    newArgumentWeight = oldArgumentWeight + 1;
+                }
             } else {
-              // we want to raise the argument
-              newArgumentWeight = oldArgumentWeight + 1;
-            }
-          } else {
                 targetColumnId = oldColumn.nextElementSibling.id;
 
                 // if we are on right-side, we want to raise the argument
-            if (rightSide) {
-              newArgumentWeight = oldArgumentWeight + 1;
-            } else {
-              // we want to lower the argument
-              newArgumentWeight = oldArgumentWeight - 1;
+                if (rightSide) {
+                    newArgumentWeight = oldArgumentWeight + 1;
+                } else {
+                    // we want to lower the argument
+                    newArgumentWeight = oldArgumentWeight - 1;
+                }
             }
-          }
 
-          moveArgumentToAnotherColumn(oldColumnId, targetColumnId, id, newArgumentWeight);
+            moveArgumentToAnotherColumn(oldColumnId, targetColumnId, id, newArgumentWeight);
         }
 
 
 
         // Will move a specific argument from one column into another and also doing the data-change on the backend
         function moveArgumentToAnotherColumn(oldColumnId, newColumnId, argumentId, newWeight) {
-          console.log("Will change argument " + argumentId + " to weight " + newWeight + " and move to column " + newColumnId);
+            console.log("Will change argument " + argumentId + " to weight " + newWeight + " and move to column " + newColumnId);
 
-          var jqxhr = $.get( "/argument/changeWeight/" + argumentId + "/" + newWeight, function() {
-                  console.log("Triggered change-weight of argument:" + argumentId);
-                })
-                  .done(function() {
-                    
-                  })
-                  .fail(function() {
-                    alert( "error" );
-                    
-                  })
-                  .always(function() {
-                    console.log("Finished change weight backend update for argument:" + argumentId);
-                  });
+            var jqxhr = $.get("/argument/changeWeight/" + argumentId + "/" + newWeight, function () {
+                console.log("Triggered change-weight of argument:" + argumentId);
+            })
+                    .done(function () {
 
-          var hiddenDiv = $("div[data-id=" + argumentId + "]");
-          hiddenDiv.data("weight", newWeight);
+                    })
+                    .fail(function () {
+                        alert("error");
 
-          // At first, remove the old box from the old column
-          var visibleDiv = document.getElementById(argumentId);
-          visibleDiv.remove();
+                    })
+                    .always(function () {
+                        console.log("Finished change weight backend update for argument:" + argumentId);
+                    });
 
-          // Then create the same box, just in another column
-          var proOrContra = hiddenDiv.data("pro");
-          var weight = hiddenDiv.data("weight");
-          var argument = hiddenDiv.data("argument");
-          var category = hiddenDiv.data("category");
-          var argumentId = hiddenDiv.data("id");
+            var hiddenDiv = $("div[data-id=" + argumentId + "]");
+            hiddenDiv.data("weight", newWeight);
 
-          addBox(proOrContra, weight, argument, category, argumentId);
+            // At first, remove the old box from the old column
+            var visibleDiv = document.getElementById(argumentId);
+            visibleDiv.remove();
 
-          // finally, recalculate boxes of the old and new column, to make sure the boxes are in correct height
-          console.log(oldColumnId);
-          console.log(newColumnId);
-          recalculateBoxes(oldColumnId);
-          recalculateBoxes(newColumnId);
-          calculateAngle();
+            // Then create the same box, just in another column
+            var proOrContra = hiddenDiv.data("pro");
+            var weight = hiddenDiv.data("weight");
+            var argument = hiddenDiv.data("argument");
+            var category = hiddenDiv.data("category");
+            var argumentId = hiddenDiv.data("id");
+            var likes = $(this).data("likes");
+
+            addBox(proOrContra, weight, argument, category, argumentId, likes);
+
+            // finally, recalculate boxes of the old and new column, to make sure the boxes are in correct height
+            console.log(oldColumnId);
+            console.log(newColumnId);
+            recalculateBoxes(oldColumnId);
+            recalculateBoxes(newColumnId);
+            calculateAngle();
         }
 
 
         function removeArgument(id) {
 
-          var jqxhr = $.get( "/argument/delete/" + id, function() {
-                  console.log("Triggered deletion of argument:" + id);
-                })
-                  .done(function() {
-                    
-                  })
-                  .fail(function() {
-                    alert( "error" );
-                    
-                  })
-                  .always(function() {
-                    console.log("Finished deletion process of argument:" + id);
-                  });
+            var jqxhr = $.get("/argument/delete/" + id, function () {
+                console.log("Triggered deletion of argument:" + id);
+            })
+                    .done(function () {
 
-          var hiddenDiv = $("div[data-id=" + id + "]");
-          // remove the hidden element in data-div
-          hiddenDiv.remove();
-          // remove visible element
-          var visibleDiv = document.getElementById(id);
-          var columnToRender = visibleDiv.parentNode.id;
-          visibleDiv.remove();
+                    })
+                    .fail(function () {
+                        alert("error");
 
-          recalculateBoxes(columnToRender);
-          calculateAngle();
+                    })
+                    .always(function () {
+                        console.log("Finished deletion process of argument:" + id);
+                    });
+
+            var hiddenDiv = $("div[data-id=" + id + "]");
+            // remove the hidden element in data-div
+            hiddenDiv.remove();
+            // remove visible element
+            var visibleDiv = document.getElementById(id);
+            var columnToRender = visibleDiv.parentNode.id;
+            visibleDiv.remove();
+
+            recalculateBoxes(columnToRender);
+            calculateAngle();
+        }
+
+        function likeArgument(id) {
+
+            console.log("User clicked like argument:" + id);
+            
+            $.get("/argument/like/" + id, function(data, status){
+                console.log("Successful liked argument: " + id + " and got status: " + status);
+              });
+              
+            var visibleDiv = document.getElementById(id);
+            visibleDiv.querySelector("i.fa-star").setAttribute('class', 'fas fa-star');
+            visibleDiv.querySelector("i.fa-star").setAttribute("onClick", "dislikeArgument(" + id + ");");
+        }
+        
+        function dislikeArgument(id) {
+
+            console.log("User clicked dislike argument:" + id);
+            
+            $.get("/argument/dislike/" + id, function(data, status){
+                console.log("Successful disliked argument: " + id + " and got status: " + status);
+              });
+              
+            var visibleDiv = document.getElementById(id);
+            visibleDiv.querySelector("i.fa-star").setAttribute("onClick", "likeArgument(" + id + ");");
+            visibleDiv.querySelector("i.fa-star").setAttribute('class', 'far fa-star');
         }
 
         // Get all boxes of the specific column and move them if required. Parameter: id of column.
         function recalculateBoxes(columnToRender) {
 
-          var boxes = document.getElementById(columnToRender).children;
+            var boxes = document.getElementById(columnToRender).children;
 
-          var i = 0;
-          for (actBox of boxes) {
-            var oldBottom = actBox.style.bottom;
-            var newBottom = 20;
-            if (i > 0) {
-              newBottom = newBottom + (55 * i);
+            var i = 0;
+            for (actBox of boxes) {
+                var oldBottom = actBox.style.bottom;
+                var newBottom = 20;
+                if (i > 0) {
+                    newBottom = newBottom + (55 * i);
+                }
+
+                gsap.fromTo(actBox, {
+                    bottom: oldBottom
+                }, {
+                    bottom: newBottom,
+                    duration: 1
+                });
+                i++;
             }
-
-            gsap.fromTo(actBox, {
-              bottom: oldBottom
-            }, {
-              bottom: newBottom,
-              duration: 1
-            });
-            i++;
-          }
 
         }
 
         function rotate(element) {
 
-          if (element == 1) {
-            r = r - 2;
-            size = size + 2;
-            document.getElementById("scale-top").style.transform = "rotate(" + r + "deg)";
-            document.getElementById("left-box").style.height = size + "px";
-            // document.getElementById("left-box").style.width =  size+"px"; 
+            if (element == 1) {
+                r = r - 2;
+                size = size + 2;
+                document.getElementById("scale-top").style.transform = "rotate(" + r + "deg)";
+                document.getElementById("left-box").style.height = size + "px";
+                // document.getElementById("left-box").style.width =  size+"px"; 
 
-          }
-          if (element == 2) {
-            r = r + 2;
-            size2 = size2 + 2;
-            document.getElementById("scale-top").style.transform = "rotate(" + r + "deg)";
-            document.getElementById("right-box").style.height = size2 + "px";
-            // document.getElementById("right-box").style.width =  size2+"px";
-          }
-          console.log("r:" + r + " sizes:" + size + " " + size2)
+            }
+            if (element == 2) {
+                r = r + 2;
+                size2 = size2 + 2;
+                document.getElementById("scale-top").style.transform = "rotate(" + r + "deg)";
+                document.getElementById("right-box").style.height = size2 + "px";
+                // document.getElementById("right-box").style.width =  size2+"px";
+            }
+            console.log("r:" + r + " sizes:" + size + " " + size2)
         }
 
 
         function calculateAngle() {
 
-          // maximum angle is: 22
-          var oldAngle = $("#current-angle").data("current-angle");
-          console.log("Old angle: " + oldAngle);
+            // maximum angle is: 22
+            var oldAngle = $("#current-angle").data("current-angle");
+            console.log("Old angle: " + oldAngle);
 
-          var newAngleFinal = 0;
+            var newAngleFinal = 0;
 
-          // get all left-side boxes
-          var leftSide1Divs = document.getElementById("left-side-1").children.length;
-          var leftSide2Divs = document.getElementById("left-side-2").children.length;
-          var leftSide3Divs = document.getElementById("left-side-3").children.length;
-          var weightLeftSide = (leftSide1Divs * 1) + (leftSide2Divs * 2) + (leftSide3Divs * 3);
-          console.log("left w:" + weightLeftSide);
+            // get all left-side boxes
+            var leftSide1Divs = document.getElementById("left-side-1").children.length;
+            var leftSide2Divs = document.getElementById("left-side-2").children.length;
+            var leftSide3Divs = document.getElementById("left-side-3").children.length;
+            var weightLeftSide = (leftSide1Divs * 1) + (leftSide2Divs * 2) + (leftSide3Divs * 3);
+            console.log("left w:" + weightLeftSide);
 
-          // get all right-side boxes
-          var rightSide1Divs = document.getElementById("right-side-1").children.length;
-          var rightSide2Divs = document.getElementById("right-side-2").children.length;
-          var rightSide3Divs = document.getElementById("right-side-3").children.length;
-          var weightRightSide = (rightSide1Divs * 1) + (rightSide2Divs * 2) + (rightSide3Divs * 3);
-          console.log("right w:" + weightRightSide);
+            // get all right-side boxes
+            var rightSide1Divs = document.getElementById("right-side-1").children.length;
+            var rightSide2Divs = document.getElementById("right-side-2").children.length;
+            var rightSide3Divs = document.getElementById("right-side-3").children.length;
+            var weightRightSide = (rightSide1Divs * 1) + (rightSide2Divs * 2) + (rightSide3Divs * 3);
+            console.log("right w:" + weightRightSide);
 
-          var rightSideBigger;
-          var sameWeights = false;
-          if (weightRightSide > weightLeftSide) {
-            rightSideBigger = true;
-          } else if (weightRightSide < weightLeftSide) {
-            rightSideBigger = false;
-          } else {
-            sameWeights = true;
-          }
-          console.log("right bigger than left?" + rightSideBigger);
-
-          if (sameWeights) {
-            newAngleFinal = 0;
-          } else if (rightSideBigger) {
-
-            // If no elements are on the left side, set to maximum angle
-            if (weightLeftSide == 0) {
-              newAngleFinal = 15;
+            var rightSideBigger;
+            var sameWeights = false;
+            if (weightRightSide > weightLeftSide) {
+                rightSideBigger = true;
+            } else if (weightRightSide < weightLeftSide) {
+                rightSideBigger = false;
             } else {
+                sameWeights = true;
+            }
+            console.log("right bigger than left?" + rightSideBigger);
 
-              var percentage = weightRightSide / weightLeftSide;
-              var newAngle = (percentage * 100) - 100;
+            if (sameWeights) {
+                newAngleFinal = 0;
+            } else if (rightSideBigger) {
 
-              var truncated = newAngle - newAngle % 1;
-              var newAngleFinal = 15 * (truncated / 100);
+                // If no elements are on the left side, set to maximum angle
+                if (weightLeftSide == 0) {
+                    newAngleFinal = 15;
+                } else {
 
-              if (newAngleFinal > 15) {
-                newAngleFinal = 15;
-              }
+                    var percentage = weightRightSide / weightLeftSide;
+                    var newAngle = (percentage * 100) - 100;
+
+                    var truncated = newAngle - newAngle % 1;
+                    var newAngleFinal = 15 * (truncated / 100);
+
+                    if (newAngleFinal > 15) {
+                        newAngleFinal = 15;
+                    }
+                }
+
+            } else if (!rightSideBigger) {
+
+                // If no elements are on the right side, set to maximum angle
+                if (weightRightSide == 0) {
+                    newAngleFinal = "-" + 15;
+                } else {
+
+                    var percentage = weightLeftSide / weightRightSide;
+                    var newAngle = (percentage * 100) - 100;
+
+                    var truncated = newAngle - newAngle % 1;
+                    var newAngleFinal = "-" + 15 * (truncated / 100);
+
+                    if (newAngleFinal < -15) {
+                        newAngleFinal = "-" + 15;
+                    }
+                }
             }
 
-          } else if (!rightSideBigger) {
 
-            // If no elements are on the right side, set to maximum angle
-            if (weightRightSide == 0) {
-              newAngleFinal = "-" + 15;
-            } else {
-
-              var percentage = weightLeftSide / weightRightSide;
-              var newAngle = (percentage * 100) - 100;
-
-              var truncated = newAngle - newAngle % 1;
-              var newAngleFinal = "-" + 15 * (truncated / 100);
-
-              if (newAngleFinal < -15) {
-                newAngleFinal = "-" + 15;
-              }
-            }
-          }
-
-
-          setAngle(oldAngle, newAngleFinal);
-          $("#current-angle").data("current-angle", newAngleFinal);
-          console.log("new angle:" + newAngleFinal);
+            setAngle(oldAngle, newAngleFinal);
+            $("#current-angle").data("current-angle", newAngleFinal);
+            console.log("new angle:" + newAngleFinal);
         }
 
         function setAngle(oldAngle, newAngle) {
 
-          // set new angle in hidden div
-          $("#current-angle").data("current-angle", newAngle);
+            // set new angle in hidden div
+            $("#current-angle").data("current-angle", newAngle);
 
-          gsap.fromTo("#scale-top", {
-            rotate: oldAngle
-          }, {
-            rotate: newAngle,
-            duration: 3
-          });
+            gsap.fromTo("#scale-top", {
+                rotate: oldAngle
+            }, {
+                rotate: newAngle,
+                duration: 3
+            });
 
         }
 
+        function addAllArguments() {
+            addArguments(1);
+            addArguments(2);
+            addArguments(3);
+            addArguments(4);
+            addArguments(99);
+        }
 
         function addArguments(groupId) {
 
-          makeOldArgumentsGrey();
+            makeOldArgumentsGrey();
 
-          $(".argument-data-group-" + groupId + " > div").each(function(index, value) {
-            console.log("Adding argument of group " + groupId + ":" + $(this).data("argument"));
-            console.log($(this).data("argument"));
+            $(".argument-data-group-" + groupId + " > div").each(function (index, value) {
+                console.log("Adding argument of group " + groupId + ":" + $(this).data("argument"));
+                console.log($(this).data("argument"));
 
-            var proOrContra = $(this).data("pro");
-            var weight = $(this).data("weight");
-            var argument = $(this).data("argument");
-            var category = $(this).data("category");
-            var argumentId = $(this).data("id");
+                var proOrContra = $(this).data("pro");
+                var weight = $(this).data("weight");
+                var argument = $(this).data("argument");
+                var category = $(this).data("category");
+                var argumentId = $(this).data("id");
+                var likes = $(this).data("likes");
 
-            addBox(proOrContra, weight, argument, category, argumentId);
+                addBox(proOrContra, weight, argument, category, argumentId, likes);
 
-          });
+            });
 
-          unlockGroup(groupId);
-          calculateAngle();
+            unlockGroup(groupId);
+            calculateAngle();
         }
 
         // add new div to the hidden-div area, to keep in mind that this group-arguments are visible
         function unlockGroup(groupId) {
-          var hiddenParentDiv = $("div.rendering-data");
-          var newDiv = document.createElement("div");
-          newDiv.setAttribute("data-group-visible", groupId);
-          hiddenParentDiv.append(newDiv);
+            var hiddenParentDiv = $("div.rendering-data");
+            var newDiv = document.createElement("div");
+            newDiv.setAttribute("data-group-visible", groupId);
+            hiddenParentDiv.append(newDiv);
         }
 
         function makeOldArgumentsGrey() {
-          $("div.box").addClass("greyed-out");
+            $("div.box").addClass("greyed-out");
         }
 
         // proOrContra: left = 1, right = 2
         // weight: 1 (Inner), 2, 3 (Outer)
         // category: 1 (economy), 2 (ecologic), 3 (social)
         // id: the unique-identifier of the argument
-        function addBox(proOrContra, weight, text, category, id) {
+        function addBox(proOrContra, weight, text, category, id, likes) {
 
-        console.log("Entered addBox");
-        
-        
-          var targetDiv;
-          if (proOrContra == 1) {
-            targetDiv = document.getElementById("left-side-" + weight);
-          } else if (proOrContra == 2) {
-            targetDiv = document.getElementById("right-side-" + weight);
-          }
+            var targetDiv;
+            if (proOrContra == 1) {
+                targetDiv = document.getElementById("left-side-" + weight);
+            } else if (proOrContra == 2) {
+                targetDiv = document.getElementById("right-side-" + weight);
+            }
 
-          var numberOfElements = targetDiv.children.length;
-          var newHeight = numberOfElements * 55 + 20;
-          // First element needs to be on top of the scale-top
-          if (numberOfElements == 0) newHeight = 20;
+            var numberOfElements = targetDiv.children.length;
+            var newHeight = numberOfElements * 55 + 20;
+            // First element needs to be on top of the scale-top
+            if (numberOfElements == 0)
+                newHeight = 20;
 
-          var newDiv = document.querySelector("div[id='argument-example']").cloneNode(true);
-          newDiv.id = id;
-          newDiv.querySelector("div.field-argument").textContent = text;
-          
-          console.log("Before trash");
-          console.log(newDiv);
-          newDiv.querySelector("i.fa-trash-alt").setAttribute("onClick", "removeArgument(" + id + ");");
-          console.log("after trash");
-          newDiv.querySelector("i.fa-arrow-alt-circle-left").setAttribute("onClick", "moveArgument(" + id + ", true);");
-          newDiv.querySelector("i.fa-arrow-alt-circle-right").setAttribute("onClick", "moveArgument(" + id + ", false);");
+            var newDiv = document.querySelector("div[id='argument-example']").cloneNode(true);
+            newDiv.id = id;
+            newDiv.querySelector("div.field-argument").textContent = text;
+            newDiv.querySelector("i.fa-star").setAttribute("onClick", "likeArgument(" + id + ");");
+            newDiv.querySelector("i.fa-trash-alt").setAttribute("onClick", "removeArgument(" + id + ");");
+            newDiv.querySelector("i.fa-arrow-alt-circle-left").setAttribute("onClick", "moveArgument(" + id + ", true);");
+            newDiv.querySelector("i.fa-arrow-alt-circle-right").setAttribute("onClick", "moveArgument(" + id + ", false);");
 
-          switch (parseInt(category)) {
-            case 1:
-              newDiv.className = "box color-economic";
-              break;
-            case 2:
-              newDiv.className = "box color-ecologic";
-              break;
-            case 3:
-              newDiv.className = "box color-social";
-              break;
-          }
+            if (likes != 0) {
+                newDiv.querySelector("div.number-circle").textContent = likes;
+            }
 
-          newDiv.style.bottom = newHeight + "px";
+            switch (parseInt(category)) {
+                case 1:
+                    newDiv.className = "box color-economic";
+                    break;
+                case 2:
+                    newDiv.className = "box color-ecologic";
+                    break;
+                case 3:
+                    newDiv.className = "box color-social";
+                    break;
+            }
 
-          targetDiv.append(newDiv);
+            newDiv.style.bottom = newHeight + "px";
+
+            targetDiv.append(newDiv);
         }
 
         $("#form_argument").submit(function (e) {
-            
+
             e.preventDefault();
-            
+
             var argument = this.argument.value;
             var proOrContra = this.proArgument.checked;
             var category = this.category.value;
             var weight = this.weight.value;
             var newArgumentId = Date.now();
-            
+
             // Doing backend Ajax call, to create argument also in backend
             $.post("/argument/add",
-                            {id: newArgumentId, proArgument: proOrContra, weight: weight,
-                            category: category, argument: argument, groupId: 56184653219999},
-                            function (response) {
-                                console.log("Successful created new argument in backend.");
-                            }
-                    );
-            
+                    {id: newArgumentId, proArgument: proOrContra, weight: weight,
+                        category: category, argument: argument, groupId: 56184653219999},
+                    function (response) {
+                        console.log("Successful created new argument in backend.");
+                    }
+            );
+
             var newDiv = document.querySelector("div[id='hidden-argument-example']").cloneNode(true);
-  					newDiv.removeAttribute("id");
+            newDiv.removeAttribute("id");
             newDiv.setAttribute('data-id', newArgumentId);
             newDiv.setAttribute('data-weight', weight);
             newDiv.setAttribute('data-category', category);
@@ -587,15 +628,24 @@
             newDiv.setAttribute('data-argument', argument);
             var targetDiv = $("div.argument-data-group-99");
             targetDiv.append(newDiv);
-            
+
             // Adding visual box
             $('#modal-dialog-add-argument').modal('hide');
-            addBox(proOrContra ? 1 : 2, weight, argument, category, newArgumentId);
+            addBox(proOrContra ? 1 : 2, weight, argument, category, newArgumentId, 0);
             calculateAngle();
             $('#form_argument').trigger("reset");
-            
+
             return true;
         });
-    
+
     </script>
+
+    <div th:if="${!isAdmin}">
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                addAllArguments();
+            });
+        </script>
+    </div>
+
 </html>

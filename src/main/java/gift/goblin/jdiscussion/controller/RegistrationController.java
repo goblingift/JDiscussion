@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Andre Kessler (https://github.com/goblingift)
+ * Copyright (C) 2021 Andre Kessler (https://github.com/goblingift)
  * All rights reserved
  */
 package gift.goblin.jdiscussion.controller;

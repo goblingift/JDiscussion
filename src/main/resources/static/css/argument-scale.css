@@ -133,3 +133,28 @@ div.big-grey-text {
 #text-category-contra {
   left: 1050px;
 }
+
+
+.btn-label {
+  position: relative;
+  left: -12px;
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px 0 0 3px;
+}
+
+
+div.number-circle {
+  position: absolute;
+  bottom: -8px;
+  left: 40px;
+  border-radius: 50%;
+  border: 2px solid #666;
+  width: 28px;
+  height: 28px;
+}
+
+div.number-circle:empty {
+  display: none;
+}

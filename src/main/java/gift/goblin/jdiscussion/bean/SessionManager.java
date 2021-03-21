@@ -28,9 +28,9 @@ public class SessionManager {
     public static final long GROUP_ID_4 = 56184653210102L;
     public static final long GROUP_ID_ADMIN = 56184653219999L;
     public static final List<Long> GROUP_IDS = List.of(GROUP_ID_1, GROUP_ID_2, GROUP_ID_3, GROUP_ID_4);
-    public static final String GROUP_DESCR_1 = "Kleinbauern";
-    public static final String GROUP_DESCR_2 = "Kapitalisten";
-    public static final String GROUP_DESCR_3 = "Offizielle";
+    public static final String GROUP_DESCR_1 = "Kleinbauern 1";
+    public static final String GROUP_DESCR_2 = "Kleinbauern 2";
+    public static final String GROUP_DESCR_3 = "Kapitalisten";
     public static final String GROUP_DESCR_4 = "Umweltschuetzer";
     public static final String GROUP_DESCR_ADMIN = "Lehrer";
 

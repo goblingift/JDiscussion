@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Andre Kessler (https://github.com/goblingift)
+ * Copyright (C) 2021 Andre Kessler (https://github.com/goblingift)
  * All rights reserved
  */
 package gift.goblin.jdiscussion.controller;
@@ -7,7 +7,9 @@ package gift.goblin.jdiscussion.controller;
 import gift.goblin.jdiscussion.WebSecurityConfig;
 import gift.goblin.jdiscussion.bean.SessionManager;
 import gift.goblin.jdiscussion.mongodb.model.Argument;
+import gift.goblin.jdiscussion.mongodb.model.ArgumentLikes;
 import gift.goblin.jdiscussion.mongodb.model.UserGroup;
+import gift.goblin.jdiscussion.mongodb.repo.ArgumentLikesRepository;
 import gift.goblin.jdiscussion.mongodb.repo.ArgumentRepository;
 import gift.goblin.jdiscussion.mongodb.repo.UserGroupRepository;
 import java.util.List;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.context.request.RequestContextHolder;
 
 /**
  *
@@ -41,16 +44,19 @@ public class ArgumentController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    ArgumentRepository argumentRepository;
+    private ArgumentRepository argumentRepository;
+    
+    @Autowired
+    private ArgumentLikesRepository argumentLikesRepository;
 
     @Autowired
-    UserGroupRepository userGroupRepository;
+    private UserGroupRepository userGroupRepository;
 
     @Autowired
-    SessionManager sessionManager;
+    private SessionManager sessionManager;
 
     @GetMapping(value = {"/new"})
-    public String renderMainMenu(HttpSession session, Model model) {
+    public String renderAddArgumentView(HttpSession session, Model model) {
 
         logger.info("User opened argument-creation overview.");
 
@@ -76,7 +82,7 @@ public class ArgumentController {
     }
 
     @PostMapping(value = {"/add"})
-    public String addQuizcard(@ModelAttribute("newArgument") Argument newArgument, BindingResult bindingResult, Model model, HttpSession session) {
+    public String addArgument(@ModelAttribute("newArgument") Argument newArgument, BindingResult bindingResult, Model model, HttpSession session) {
 
         if (newArgument.getId() == null || newArgument.getId() == 0) {
             newArgument.setId(System.currentTimeMillis());
@@ -148,6 +154,41 @@ public class ArgumentController {
             //return false;
         }
 
+        return "redirect:/argument/new";
+    }
+    
+    @GetMapping(value = "/like/{id}")
+    public String likeArgument(@PathVariable("id") String id) {
+        
+        logger.info("User liked argument: " + id);
+        
+        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
+        Optional<ArgumentLikes> optEntry = argumentLikesRepository.findBySessionIdAndArgumentId(sessionId, Long.parseLong(id));
+        if (optEntry.isEmpty()) {
+            ArgumentLikes argumentLike = new ArgumentLikes(System.currentTimeMillis(), Long.parseLong(id), sessionId);
+            argumentLikesRepository.save(argumentLike);
+            logger.info("Successful saved like for argument: " + id);
+        } else {
+            logger.info("User has already liked argument {}, skip like.", id);
+        }
+        
+        return "redirect:/argument/new";
+    }
+    
+    @GetMapping(value = "/dislike/{id}")
+    public String dislikeArgument(@PathVariable("id") String id) {
+        
+        logger.info("User disliked argument: " + id);
+        
+        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
+        Optional<ArgumentLikes> optEntry = argumentLikesRepository.findBySessionIdAndArgumentId(sessionId, Long.parseLong(id));
+        if (!optEntry.isEmpty()) {
+            argumentLikesRepository.delete(optEntry.get());
+            logger.info("Successful disliked argument: " + id);
+        } else {
+            logger.info("No entry found for argument-id {} and session-id {}, skip like.", id, sessionId);
+        }
+        
         return "redirect:/argument/new";
     }
 
