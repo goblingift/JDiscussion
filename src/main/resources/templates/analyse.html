@@ -3,10 +3,11 @@
     <body>
 
 
-
+        <div class="alert alert-dark m-1" id="alert-already-liked" role="alert" style="display:none">Max. 1 Argument kann geliked werden!<button type="button"  onclick="hideAlertMessage()" class="close">&times;</button></div>
         <div class="argument-data-div">
             <div class="rendering-data">
                 <div id="current-angle" data-current-angle="0"></div>
+                <div id="liked-argument" th:data-liked-argument="${likedArgument}"></div>
                 <div id="hidden-argument-example" data-id="999999" data-weight="1" data-category="1" data-pro="1" data-argument="EXAMPLE"></div>
                 <div id="argument-example" data-weight=3 class="box">
                     <div class="row">
@@ -345,31 +346,76 @@
             recalculateBoxes(columnToRender);
             calculateAngle();
         }
+        
+        function hideAlertMessage() {
+            $("#alert-already-liked").hide();
+        }
 
         function likeArgument(id) {
 
             console.log("User clicked like argument:" + id);
             
-            $.get("/argument/like/" + id, function(data, status){
-                console.log("Successful liked argument: " + id + " and got status: " + status);
-              });
-              
-            var visibleDiv = document.getElementById(id);
-            visibleDiv.querySelector("i.fa-star").setAttribute('class', 'fas fa-star');
-            visibleDiv.querySelector("i.fa-star").setAttribute("onClick", "dislikeArgument(" + id + ");");
+            if ($("#liked-argument").data("liked-argument") === "" ) {
+                console.log("LETS LIKE");
+                updateLikeCounter(id, true);
+                
+                $.get("/argument/like/" + id, function (data, status) {
+                    console.log("Successful liked argument: " + id + " and got status: " + status);
+                });
+            } else {
+                console.log("ALREADY LIKED");
+                $("#alert-already-liked").show();
+
+                gsap.fromTo("#alert-already-liked", {
+                    top: "-60px"
+                    }, {
+                    top: "0px",
+                    duration: 1
+                    });
+            }
+
         }
-        
+
         function dislikeArgument(id) {
 
             console.log("User clicked dislike argument:" + id);
-            
-            $.get("/argument/dislike/" + id, function(data, status){
+
+            $.get("/argument/dislike/" + id, function (data, status) {
                 console.log("Successful disliked argument: " + id + " and got status: " + status);
-              });
-              
+            });
+
+            updateLikeCounter(id, false);
+        }
+
+        // Updates the like counter (true if user liked, false if disliked)
+        function updateLikeCounter(id, likeGiven) {
+            console.log("Entered updateLikeCounter method");
             var visibleDiv = document.getElementById(id);
-            visibleDiv.querySelector("i.fa-star").setAttribute("onClick", "likeArgument(" + id + ");");
-            visibleDiv.querySelector("i.fa-star").setAttribute('class', 'far fa-star');
+            var hiddenDiv = $("div[data-id=" + id + "]");
+            var numberDiv = visibleDiv.querySelector("div.number-circle");
+            var currentCount = numberDiv.textContent;
+            var newCount = 1;
+
+            if (likeGiven) {
+                $("#liked-argument").data("liked-argument", id);
+                visibleDiv.querySelector("i.fa-star").setAttribute('class', 'fas fa-star');
+                visibleDiv.querySelector("i.fa-star").setAttribute("onClick", "dislikeArgument(" + id + ");");
+
+                if (currentCount.length > 0) {
+                    newCount = parseInt(currentCount) + 1;
+                }
+            } else {
+                $("#liked-argument").data("liked-argument", "");
+                visibleDiv.querySelector("i.fa-star").setAttribute('class', 'far fa-star');
+                visibleDiv.querySelector("i.fa-star").setAttribute("onClick", "likeArgument(" + id + ");");
+                newCount = parseInt(currentCount) - 1;
+                if (newCount == 0) {
+                    newCount = "";
+                }
+            }
+
+            numberDiv.textContent = newCount;
+            hiddenDiv.data("likes", newCount);
         }
 
         // Get all boxes of the specific column and move them if required. Parameter: id of column.
@@ -644,6 +690,14 @@
         <script th:inline="javascript">
             $(document).ready(function () {
                 addAllArguments();
+                
+                var likedArgument = $("#liked-argument").data("liked-argument");
+                var visibleDiv = document.getElementById(likedArgument);
+                if (visibleDiv) {
+                    var likeButton = visibleDiv.querySelector("i.fa-star");
+                    visibleDiv.querySelector("i.fa-star").setAttribute('class', 'fas fa-star');
+                    visibleDiv.querySelector("i.fa-star").setAttribute("onClick", "dislikeArgument(" + likedArgument + ");");
+                }
             });
         </script>
     </div>

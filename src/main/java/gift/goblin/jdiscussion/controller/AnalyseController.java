@@ -74,6 +74,13 @@ public class AnalyseController {
             logger.info("Added admin-arguments to view: " + adminArguments);
         }
         
+        String likedArgument = "";
+        Optional<ArgumentLikes> optArgumentLikes = argumentLikesRepository.findBySessionId(RequestContextHolder.currentRequestAttributes().getSessionId());
+        if (optArgumentLikes.isPresent()) {
+            likedArgument = optArgumentLikes.get().getArgumentId().toString();
+        }
+        
+        model.addAttribute("likedArgument", likedArgument);
         model.addAttribute("sessionId", RequestContextHolder.currentRequestAttributes().getSessionId());
         model.addAttribute("newArgument", new Argument());
         model.addAttribute("createArguments", gameStatus.isCreateArguments());
