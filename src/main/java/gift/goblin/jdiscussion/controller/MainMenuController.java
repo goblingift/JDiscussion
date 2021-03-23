@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Andre Kessler (https://github.com/goblingift)
+ * Copyright (C) 2021 Andre Kessler (https://github.com/goblingift)
  * All rights reserved
  */
 package gift.goblin.jdiscussion.controller;
@@ -15,9 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.context.request.RequestContextHolder;
 
 /**
  *
@@ -34,13 +36,15 @@ public class MainMenuController {
 
     @Autowired
     private SessionManager sessionManager;
-
+    
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping(value = {"/home", "/"})
     public String renderMainMenu(HttpSession session, Model model, Authentication authentication) {
 
         logger.info("User opened main-menu. Game status is: {}", gameStatus.isCreateArguments());
+        
+        logger.info(RequestContextHolder.currentRequestAttributes().getSessionId());
 
         if (sessionManager.isUserAdmin(authentication)) {
             logger.info("User has admin-role, display more options for em.");

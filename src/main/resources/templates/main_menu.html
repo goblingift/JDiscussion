@@ -19,6 +19,15 @@
                 </a>
             </div>
             
+            <div th:if="${!createArguments}">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h1 class="display-4" style="color: grey;">Argumente anlegen</h1>
+                        <p class="lead">Der Lehrer hat diese Phase noch nicht gestartet</p>
+                    </div>
+                </div>
+            </div>
+            
             <div th:if="${analysePhase}">
                 <a href="/analyse">
                     <div class="jumbotron jumbotron-fluid">
@@ -30,15 +39,6 @@
                 </a>
             </div>
             
-            <div th:if="${!createArguments}">
-                <div class="jumbotron jumbotron-fluid">
-                    <div class="container">
-                        <h1 class="display-4" style="color: grey;">Argumente anlegen</h1>
-                        <p class="lead">Der Lehrer hat diese Phase noch nicht gestartet</p>
-                    </div>
-                </div>
-            </div>
-
             <div th:if="${isAdmin}">
                 <div th:if="${createArguments}">
                     <a href="/stop-game">

@@ -5,6 +5,7 @@
 package gift.goblin.jdiscussion.mongodb.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -36,6 +37,12 @@ public class Argument {
     private Byte category;
     
     private String argument;
+    
+    /**
+     * How many users liked this argument. Field wont be persisted.
+     */
+    @Transient
+    private int likes;
     
     /**
      * Relationship, to which group this argument should be included.
@@ -90,9 +97,17 @@ public class Argument {
         this.groupId = groupId;
     }
 
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
     @Override
     public String toString() {
-        return "Argument{" + "id=" + id + ", proArgument=" + proArgument + ", weight=" + weight + ", category=" + category + ", argument=" + argument + '}';
+        return "Argument{" + "id=" + id + ", proArgument=" + proArgument + ", weight=" + weight + ", category=" + category + ", argument=" + argument + ", likes=" + likes + ", groupId=" + groupId + '}';
     }
     
 }

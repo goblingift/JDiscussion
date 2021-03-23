@@ -116,3 +116,50 @@ div.color-ecologic, a.color-ecologic {
 div.color-social, a.color-social {
     background-color: lightsalmon;
 }
+
+div.big-grey-text {
+  position: absolute;
+  bottom: 80px;
+  height: 0;
+  width: 0;
+  font-size: x-large;
+  color: lightgrey;
+}
+
+#text-category-pro {
+  left: 600px;
+}
+
+#text-category-contra {
+  left: 1050px;
+}
+
+
+.btn-label {
+  position: relative;
+  left: -12px;
+  display: inline-block;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px 0 0 3px;
+}
+
+
+div.number-circle {
+  position: absolute;
+  bottom: -8px;
+  left: 40px;
+  border-radius: 50%;
+  border: 2px solid #666;
+  width: 28px;
+  height: 28px;
+}
+
+div.number-circle:empty {
+  display: none;
+}
+
+label.label-refresh-likes {
+  font-size: 1.25rem;
+  cursor: pointer;
+}
