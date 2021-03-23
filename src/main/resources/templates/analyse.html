@@ -62,6 +62,10 @@
                     <button onclick="addAllArguments()" id="button_arguments_all" type="button" class="btn btn-secondary">Alle Anzeigen</button>
                 </div>
                 <div class="btn-group btn-group-lg mr-2" role="group">
+                    <button onclick="startVoting()" id="button_start_voting" type="button" class="btn btn-secondary">Abstimmung starten</button>
+                    <button onclick="refreshLikes()" id="button_refresh_likes" type="button" class="btn btn-secondary">Abstimmung aktualisieren</button>
+                </div>
+                <div class="btn-group btn-group-lg mr-2" role="group">
                     <button type="button" class="btn btn-labeled btn-success" data-toggle="modal" data-target="#modal-dialog-add-argument"><span class="btn-label"><i class="fas fa-plus-circle fa-lg"></i></span>Argument hinzufügen</button>
                 </div>
             </div>
@@ -346,19 +350,57 @@
             recalculateBoxes(columnToRender);
             calculateAngle();
         }
-        
+
         function hideAlertMessage() {
             $("#alert-already-liked").hide();
+        }
+
+        function refreshLikes() {
+            console.log("Start refreshing likes");
+
+            // Remove all existing votes in visible boxes
+            $('div.number-circle').each(function (i, obj) {
+                obj.textContent = "";
+            });
+
+            // Remove all votes in hidden data-divs
+            $('div.argument').each(function (i, obj) {
+                obj.setAttribute("data-likes", 0);
+            });
+
+            $.get("/api/argument/argument-likes", function (data, status) {
+                console.log("Successful got argument-likes and got status: " + status);
+                console.log(data);
+
+                $.each(data, function (index) {
+                    var argumentId = data[index].argumentId;
+                    var likeCount = data[index].likeCount;
+                    renderLike(argumentId, likeCount);
+                });
+            });
+
+
+        }
+
+        function renderLike(argumentId, likeCount) {
+
+            var hiddenDiv = $("div[data-id=" + argumentId + "]");
+            hiddenDiv.data("likes", likeCount);
+
+            var visibleDiv = document.getElementById(argumentId);
+            var numberDiv = visibleDiv.querySelector("div.number-circle");
+            numberDiv.textContent = likeCount;
+
         }
 
         function likeArgument(id) {
 
             console.log("User clicked like argument:" + id);
-            
-            if ($("#liked-argument").data("liked-argument") === "" ) {
+
+            if ($("#liked-argument").data("liked-argument") === "") {
                 console.log("LETS LIKE");
                 updateLikeCounter(id, true);
-                
+
                 $.get("/argument/like/" + id, function (data, status) {
                     console.log("Successful liked argument: " + id + " and got status: " + status);
                 });
@@ -368,10 +410,10 @@
 
                 gsap.fromTo("#alert-already-liked", {
                     top: "-60px"
-                    }, {
+                }, {
                     top: "0px",
                     duration: 1
-                    });
+                });
             }
 
         }
@@ -690,7 +732,7 @@
         <script th:inline="javascript">
             $(document).ready(function () {
                 addAllArguments();
-                
+
                 var likedArgument = $("#liked-argument").data("liked-argument");
                 var visibleDiv = document.getElementById(likedArgument);
                 if (visibleDiv) {

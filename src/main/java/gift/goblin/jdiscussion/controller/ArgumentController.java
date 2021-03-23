@@ -6,13 +6,16 @@ package gift.goblin.jdiscussion.controller;
 
 import gift.goblin.jdiscussion.WebSecurityConfig;
 import gift.goblin.jdiscussion.bean.SessionManager;
+import gift.goblin.jdiscussion.dto.ArgumentWithLikes;
 import gift.goblin.jdiscussion.mongodb.model.Argument;
 import gift.goblin.jdiscussion.mongodb.model.ArgumentLikes;
 import gift.goblin.jdiscussion.mongodb.model.UserGroup;
 import gift.goblin.jdiscussion.mongodb.repo.ArgumentLikesRepository;
 import gift.goblin.jdiscussion.mongodb.repo.ArgumentRepository;
 import gift.goblin.jdiscussion.mongodb.repo.UserGroupRepository;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -210,7 +213,7 @@ public class ArgumentController {
 
         return "redirect:/argument/new";
     }
-
+    
     private boolean isUserAdmin(Authentication authentication) {
         if (authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(WebSecurityConfig.ROLE_PREFIX + WebSecurityConfig.ROLE_ADMIN))) {
             return true;
