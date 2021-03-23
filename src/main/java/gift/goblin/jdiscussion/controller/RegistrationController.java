@@ -7,6 +7,7 @@ package gift.goblin.jdiscussion.controller;
 import gift.goblin.jdiscussion.ApplicationInitializer;
 import gift.goblin.jdiscussion.WebSecurityConfig;
 import gift.goblin.jdiscussion.bean.SessionManager;
+import gift.goblin.jdiscussion.dto.GameStatus;
 import gift.goblin.jdiscussion.dto.UserCredentials;
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
@@ -37,6 +38,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RegistrationController {
 
     @Autowired
+    GameStatus gameStatus;
+    
+    @Autowired
     private BuildProperties buildProperties;
 
     @Autowired
@@ -46,27 +50,33 @@ public class RegistrationController {
 
     @GetMapping
     public String renderRegistrationForm(HttpSession session, Model model, @RequestParam(name = "grp") Optional<String> groupId) {
-        
+
         boolean loggedInAsUser = false;
         if (groupId.isPresent()) {
             logger.info("Found grp-id in request: {}", groupId);
             loggedInAsUser = tryToLoginAsGroupMember(session, groupId.get());
+        } else if (gameStatus.isAnalyseArguments()) {
+            loggedInAsUser = tryToLoginAsDefaultUser();
         }
-        
+
         model.addAttribute("userForm", new UserCredentials());
         model.addAttribute("build_artifact", buildProperties.getArtifact());
         model.addAttribute("build_version", buildProperties.getVersion());
-        
+
         if (loggedInAsUser) {
-            return "redirect:/home";
+            if (gameStatus.isAnalyseArguments()) {
+                return "redirect:/analyse";
+            } else {
+                return "redirect:/home";
+            }
         } else {
             return "registration";
         }
     }
-    
+
     private boolean tryToLoginAsGroupMember(HttpSession session, String groupId) {
         boolean success = false;
-        
+
         if (groupId != null && !groupId.isEmpty()) {
             try {
                 Long parseLong = Long.parseLong(groupId);
@@ -87,12 +97,20 @@ public class RegistrationController {
                 } else {
                     logger.warn("The parameter grp ({}) is not included in the defined list of allowed ids: {}", groupId, SessionManager.GROUP_IDS);
                 }
-                
+
             } catch (NumberFormatException e) {
                 logger.warn("The parameter grp doesnt contain a Long-value: {}", groupId);
             }
         }
-        
+
+        return success;
+    }
+
+    private boolean tryToLoginAsDefaultUser() {
+        UserDetails userDetails = userDetailsManager.loadUserByUsername("user");
+        Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        boolean success = true;
         return success;
     }
 
@@ -101,17 +119,17 @@ public class RegistrationController {
 
         session.setAttribute(WebSecurityConfig.SESSION_FIELD_USERNAME, userForm.getUsername());
         logger.info("Successful set username to session: {}", userForm.getUsername());
-        
+
         UserDetails userDetails;
         if (userForm.getUsername().equalsIgnoreCase(WebSecurityConfig.ADMIN_USERNAME)) {
             userDetails = userDetailsManager.loadUserByUsername(WebSecurityConfig.ADMIN_USERNAME);
         } else {
             userDetails = userDetailsManager.loadUserByUsername("user");
         }
-        
+
         Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
-        
+
         return "redirect:/home";
     }
 

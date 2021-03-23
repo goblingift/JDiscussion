@@ -1,5 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head th:replace="library_includes :: frontend_libraries_analyse" />
+    <div th:if="${!isAdmin}">
+        <link href="../static/css/argument-scale_hidden_icons.css" th:href="@{/css/argument-scale_hidden_icons.css}" rel="stylesheet" />
+    </div>
     <body>
 
 
@@ -63,7 +66,12 @@
                 </div>
                 <div class="btn-group btn-group-lg mr-2" role="group">
                     <button onclick="startVoting()" id="button_start_voting" type="button" class="btn btn-secondary">Abstimmung starten</button>
-                    <button onclick="refreshLikes()" id="button_refresh_likes" type="button" class="btn btn-secondary">Abstimmung aktualisieren</button>
+                    <button onclick="refreshLikes()" id="button_refresh_likes" type="button" class="btn btn-secondary">Likes aktualisieren</button>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-secondary label-refresh-likes" onclick="startRefreshLikesTrigger()">
+                            <input id="chk_auto_refresh_likes" type="checkbox" autocomplete="off"> Likes autom. akt.
+                        </label>
+                    </div>
                 </div>
                 <div class="btn-group btn-group-lg mr-2" role="group">
                     <button type="button" class="btn btn-labeled btn-success" data-toggle="modal" data-target="#modal-dialog-add-argument"><span class="btn-label"><i class="fas fa-plus-circle fa-lg"></i></span>Argument hinzufügen</button>
@@ -141,7 +149,7 @@
                             <div class="form-group">
                                 <div>
                                     <a class="text-headline">Gewichtung:</a>
-                                    <p class="font-weight-light">(1 = schaches Argument | 3 = starkes, wichtiges Argument)</p>
+                                    <p class="font-weight-light">(1 = schwaches Argument | 3 = starkes, wichtiges Argument)</p>
                                 </div>
 
                                 <div class="input-group mb-3">
@@ -355,6 +363,24 @@
             $("#alert-already-liked").hide();
         }
 
+
+        function startRefreshLikesTrigger() {
+            console.log("TRIGGERED CLICK!");
+
+            var checked = $('#chk_auto_refresh_likes').attr('checked');
+            console.log(checked);
+
+            if (checked === "checked") {
+                console.log("User stopped autom. refresh of likes");
+                $('#chk_auto_refresh_likes').removeAttr("checked");
+            } else {
+                console.log("User started autom. refresh of likes");
+                $("#chk_auto_refresh_likes").attr("checked", "checked");
+                refreshLikes();
+            }
+
+        }
+
         function refreshLikes() {
             console.log("Start refreshing likes");
 
@@ -377,6 +403,12 @@
                     var likeCount = data[index].likeCount;
                     renderLike(argumentId, likeCount);
                 });
+                var checked = $('#chk_auto_refresh_likes').attr('checked');
+                console.log("Check status in refreshLikes:" + checked);
+                if (checked === "checked") {
+                    console.log("User enabled autom. refresh of likes, will fetch again in 5s");
+                    setTimeout(refreshLikes, 5000);
+                }
             });
 
 
@@ -397,7 +429,7 @@
 
             console.log("User clicked like argument:" + id);
 
-            if ($("#liked-argument").data("liked-argument") === "") {
+            if ($("#liked-argument").data("liked-argument") === "" || $("#liked-argument").data("liked-argument") === undefined) {
                 console.log("LETS LIKE");
                 updateLikeCounter(id, true);
 
@@ -603,6 +635,7 @@
             addArguments(3);
             addArguments(4);
             addArguments(99);
+            displayOwnLike();
         }
 
         function addArguments(groupId) {
@@ -687,6 +720,16 @@
 
             targetDiv.append(newDiv);
         }
+        
+        function displayOwnLike() {
+            var likedArgument = $("#liked-argument").data("liked-argument");
+            var visibleDiv = document.getElementById(likedArgument);
+            if (visibleDiv) {
+                var likeButton = visibleDiv.querySelector("i.fa-star");
+                visibleDiv.querySelector("i.fa-star").setAttribute('class', 'fas fa-star');
+                visibleDiv.querySelector("i.fa-star").setAttribute("onClick", "dislikeArgument(" + likedArgument + ");");
+            }
+        }
 
         $("#form_argument").submit(function (e) {
 
@@ -732,14 +775,6 @@
         <script th:inline="javascript">
             $(document).ready(function () {
                 addAllArguments();
-
-                var likedArgument = $("#liked-argument").data("liked-argument");
-                var visibleDiv = document.getElementById(likedArgument);
-                if (visibleDiv) {
-                    var likeButton = visibleDiv.querySelector("i.fa-star");
-                    visibleDiv.querySelector("i.fa-star").setAttribute('class', 'fas fa-star');
-                    visibleDiv.querySelector("i.fa-star").setAttribute("onClick", "dislikeArgument(" + likedArgument + ");");
-                }
             });
         </script>
     </div>

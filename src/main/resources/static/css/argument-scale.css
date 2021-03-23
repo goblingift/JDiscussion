@@ -158,3 +158,8 @@ div.number-circle {
 div.number-circle:empty {
   display: none;
 }
+
+label.label-refresh-likes {
+  font-size: 1.25rem;
+  cursor: pointer;
+}
