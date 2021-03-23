@@ -306,7 +306,9 @@
                     });
 
             var hiddenDiv = $("div[data-id=" + argumentId + "]");
+            console.log("Before updatez:" + hiddenDiv.data("weight"));
             hiddenDiv.data("weight", newWeight);
+            console.log("After updatez:" + hiddenDiv.data("weight"));
 
             // At first, remove the old box from the old column
             var visibleDiv = document.getElementById(argumentId);
@@ -318,7 +320,7 @@
             var argument = hiddenDiv.data("argument");
             var category = hiddenDiv.data("category");
             var argumentId = hiddenDiv.data("id");
-            var likes = $(this).data("likes");
+            var likes = hiddenDiv.data("likes");
 
             addBox(proOrContra, weight, argument, category, argumentId, likes);
 
@@ -328,6 +330,7 @@
             recalculateBoxes(oldColumnId);
             recalculateBoxes(newColumnId);
             calculateAngle();
+            displayOwnLike();
         }
 
 
