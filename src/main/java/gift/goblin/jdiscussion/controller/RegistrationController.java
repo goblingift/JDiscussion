@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author andre
  */
 @Controller
-@RequestMapping("/register")
+@RequestMapping({"/register", "/login"})
 public class RegistrationController {
 
     @Autowired
