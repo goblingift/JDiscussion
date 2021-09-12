@@ -39,7 +39,7 @@ public class RegistrationController {
 
     @Autowired
     GameStatus gameStatus;
-    
+
     @Autowired
     private BuildProperties buildProperties;
 
@@ -57,6 +57,8 @@ public class RegistrationController {
             loggedInAsUser = tryToLoginAsGroupMember(session, groupId.get());
         } else if (gameStatus.isAnalyseArguments()) {
             loggedInAsUser = tryToLoginAsDefaultUser();
+        } else {
+            logger.info("User opened loginpage, but couldnt get logged-in automatically.");
         }
 
         model.addAttribute("userForm", new UserCredentials());
@@ -83,12 +85,18 @@ public class RegistrationController {
                 if (SessionManager.GROUP_IDS.contains(parseLong)) {
                     if (SessionManager.GROUP_ID_1 == parseLong) {
                         session.setAttribute(WebSecurityConfig.SESSION_FIELD_GROUPNUMBER, 1);
+                        logger.info("User was logged-in as group: {}", 1);
                     } else if (SessionManager.GROUP_ID_2 == parseLong) {
                         session.setAttribute(WebSecurityConfig.SESSION_FIELD_GROUPNUMBER, 2);
+                        logger.info("User was logged-in as group: {}", 2);
                     } else if (SessionManager.GROUP_ID_3 == parseLong) {
                         session.setAttribute(WebSecurityConfig.SESSION_FIELD_GROUPNUMBER, 3);
+                        logger.info("User was logged-in as group: {}", 3);
                     } else if (SessionManager.GROUP_ID_4 == parseLong) {
                         session.setAttribute(WebSecurityConfig.SESSION_FIELD_GROUPNUMBER, 4);
+                        logger.info("User was logged-in as group: {}", 4);
+                    } else {
+                        logger.warn("Couldnt match groupId to any known groups!");
                     }
                     UserDetails userDetails = userDetailsManager.loadUserByUsername("user");
                     Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
@@ -123,12 +131,16 @@ public class RegistrationController {
         UserDetails userDetails;
         if (userForm.getUsername().equalsIgnoreCase(WebSecurityConfig.ADMIN_USERNAME)) {
             userDetails = userDetailsManager.loadUserByUsername(WebSecurityConfig.ADMIN_USERNAME);
+            Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(auth);
         } else {
-            userDetails = userDetailsManager.loadUserByUsername("user");
+            boolean success = tryToLoginAsGroupMember(session, userForm.getUsername());
+            if (success) {
+                logger.info("User was successful logged-in for group: {}", userForm.getUsername());
+            } else {
+                logger.warn("User couldnt get logged-in for group: {}", userForm.getUsername());
+            }
         }
-
-        Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
 
         return "redirect:/home";
     }

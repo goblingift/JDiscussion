@@ -96,6 +96,8 @@ public class ArgumentController {
             if (optGroupNumber.isPresent()) {
                 Long groupId = sessionManager.getGroupId(optGroupNumber.get());
                 newArgument.setGroupId(groupId);
+            } else {
+                logger.warn("Couldnt read groupNumber for user!");
             }
         }
 
