@@ -117,13 +117,13 @@ div.color-social, a.color-social {
     background-color: lightsalmon;
 }
 
-div.big-grey-text {
+div.big-text {
   position: absolute;
   bottom: 80px;
   height: 0;
   width: 0;
   font-size: x-large;
-  color: lightgrey;
+  color: black;
 }
 
 #text-category-pro {
